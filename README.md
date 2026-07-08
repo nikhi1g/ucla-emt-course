@@ -1,15 +1,14 @@
-# UCLA EMT Course Schedule
+# UCLA EMT Course
 
-Static GitHub Pages app for a sanitized UCLA EMT course schedule.
+Working Vite, React, and TypeScript starter deployed with GitHub Pages.
 
-This repository intentionally contains only app code, normalized schedule data, and development docs. It excludes personal documents, medical/immunization files, Canvas mirrors, PDFs, screenshots, access codes, and lecture media.
+This repository intentionally starts as a clean boilerplate. Course schedule features can be rebuilt on top of this base after the deployment pipeline is stable.
 
 ## Stack
 
 - Vite
 - React
 - TypeScript
-- Static data and browser-safe schedule services
 - GitHub Pages deployment
 
 ## Local development
