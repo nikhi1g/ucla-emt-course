@@ -3,50 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="UCLA EMT course schedule dashboard">
+<meta name="description" content="UCLA EMT course schedule">
 <title>UCLA EMT Course</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%233b82f6%22/></svg>">
 <style>
 :root {
-  --bg: #fff8fb;
-  --surface: #fffdf8;
+  --bg: #ffffff;
   --fg: #24292f;
-  --sub: #746b78;
-  --muted: #968d9b;
-  --line: #eadfea;
-  --acc: #8b7ff5;
-  --acc-soft: #eeeaff;
-  --rose: #ffe7ef;
-  --mint: #e7f8ef;
-  --blue: #e7f0ff;
-  --gold: #fff4d8;
-  --shadow: 0 24px 70px rgba(99, 82, 119, 0.12);
+  --acc: #0969da;
+  --sub: #57606a;
+  --line: #d0d7de;
+  --soft: #f6f8fa;
 }
 
 html[data-theme="dark"] {
-  --bg: #23232b;
-  --surface: #2b2b35;
-  --fg: #e8e6ef;
-  --sub: #b7adbf;
-  --muted: #8f8498;
-  --line: #454150;
-  --acc: #b7a8ff;
-  --acc-soft: #363148;
-  --rose: #3c2d38;
-  --mint: #273a34;
-  --blue: #293648;
-  --gold: #40392a;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  --bg: #22272e;
+  --fg: #adbac7;
+  --acc: #539bf5;
+  --sub: #768390;
+  --line: #636e7b;
+  --soft: #2d333b;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 20% 0%, var(--rose), transparent 26rem),
-    radial-gradient(circle at 90% 20%, var(--blue), transparent 28rem),
-    linear-gradient(180deg, var(--bg), var(--bg));
+  margin: 0;
+  background: var(--bg);
   color: var(--fg);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 18px;
@@ -54,298 +44,522 @@ body {
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
+
 main {
-  width: min(920px, calc(100% - 32px));
-  margin: 32px auto;
-  padding: clamp(24px, 5vw, 44px);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--surface) 90%, transparent);
-  box-shadow: var(--shadow);
+  width: min(960px, calc(100% - 40px));
+  margin: clamp(24px, 5vw, 64px) auto;
+  padding: clamp(24px, 5vw, 48px);
+  outline: 1px solid var(--sub);
+  border-radius: 12px;
   animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
   transform: translateY(12px);
 }
-@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-header { display: grid; gap: 28px; margin-bottom: 34px; }
-.topbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-h1, h2, h3, p { margin-top: 0; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+  margin-bottom: 3rem;
+}
+
+.topline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 2.6rem;
+}
+
+h1, h2, h3, p {
+  margin-top: 0;
+}
+
 h1 {
   margin: 0;
-  font-size: clamp(2.4rem, 7vw, 4.8rem);
-  font-weight: 740;
-  letter-spacing: -0.07em;
-  line-height: 0.95;
-}
-h2 {
-  margin-bottom: 1rem;
-  color: var(--sub);
-  font-size: 0.86rem;
+  font-size: clamp(2.1rem, 5vw, 3.35rem);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
 }
-h3 { margin-bottom: 0.3rem; font-size: 1.1rem; letter-spacing: -0.02em; }
-p { color: var(--sub); }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--acc); flex: 0 0 auto; }
-.status {
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: var(--acc);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.term {
   color: var(--sub);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 0.82rem;
-  opacity: 0.75;
+  font-size: 0.85rem;
+  opacity: 0.72;
 }
-.theme-toggle { margin-left: auto; border: 0; background: none; color: var(--sub); cursor: pointer; padding: 8px; }
-.hero-copy { max-width: 680px; margin-bottom: 0; }
-nav, .filters, .quick-stats { display: flex; gap: 1rem; flex-wrap: wrap; }
-a, button.filter { color: inherit; text-decoration: none; position: relative; transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease; }
-a:hover { color: var(--acc); }
-nav a::after {
+
+.theme-toggle {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--sub);
+  cursor: pointer;
+  display: flex;
+  padding: 8px;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.4rem;
+  font-size: 1.05rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+  padding: 4px 0;
+}
+
+a:hover {
+  color: var(--acc);
+}
+
+nav a::after, .week-link::after {
   content: '';
   position: absolute;
   width: 100%;
-  height: 2px;
-  left: 0;
-  bottom: 2px;
-  background: var(--acc);
   transform: scaleX(0);
+  height: 2px;
+  bottom: 4px;
+  left: 0;
+  background: var(--acc);
   transform-origin: bottom right;
   transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-nav a:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+
+nav a:hover::after, .week-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  margin: 0 0 2.8rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--line);
+}
+
+.summary div {
+  padding: 14px 16px;
+  background: var(--bg);
+}
+
+.summary strong {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.summary span {
+  color: var(--sub);
+  font-size: 0.84rem;
+}
+
 .controls {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: 1rem;
   align-items: center;
-  margin: 34px 0;
-  padding: 16px 0;
+  margin-bottom: 2.4rem;
+  padding: 1rem 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
+
 .search {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
+  border-radius: 8px;
+  background: var(--bg);
   color: var(--fg);
-  padding: 12px 16px;
   font: inherit;
+  padding: 10px 12px;
   outline: none;
 }
-.search:focus { border-color: var(--acc); box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 18%, transparent); }
-button.filter {
+
+.search:focus {
+  border-color: var(--acc);
+}
+
+.filters {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.filter {
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--bg);
   color: var(--sub);
   cursor: pointer;
   font: inherit;
-  font-size: 0.9rem;
-  padding: 9px 13px;
+  font-size: 0.86rem;
+  padding: 7px 11px;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
-button.filter.is-active { border-color: var(--acc); background: var(--acc-soft); color: var(--fg); }
-.quick-stats { margin-bottom: 34px; }
-.stat { min-width: 120px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.stat strong { display: block; font-size: 1.5rem; line-height: 1; }
-.stat span { color: var(--sub); font-size: 0.86rem; }
-.schedule { display: grid; gap: 18px; }
-.week { padding: 18px 0 6px; border-top: 1px solid var(--line); }
-.week:first-child { border-top: 0; }
-.week-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
-.week-head h2 { margin: 0; }
-.week-head span { color: var(--muted); font-size: 0.9rem; }
-.items { display: grid; gap: 10px; }
-.item { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 18px; padding: 13px 0; }
-.when { color: var(--sub); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 0.82rem; }
-.item-body { min-width: 0; }
-.item-title-row { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
-.tag {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 2px 8px;
-  background: var(--blue);
+
+.filter:hover, .filter.is-active {
+  border-color: var(--acc);
+  color: var(--acc);
+}
+
+.result-note {
+  min-height: 1.5rem;
+  margin: -1.4rem 0 1.5rem;
   color: var(--sub);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.86rem;
+}
+
+.section-title {
+  color: var(--sub);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin: 0 0 1.25rem;
   text-transform: uppercase;
 }
-.tag.exam, .tag.deadline { background: var(--rose); }
-.tag.skills { background: var(--mint); }
-.tag.reading, .tag.assignment { background: var(--gold); }
-.item p { margin: 0; color: var(--sub); font-size: 0.96rem; }
-.notice { margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.92rem; }
-.is-hidden { display: none !important; }
-@media (max-width: 720px) {
-  body { font-size: 17px; }
-  main { width: 100%; min-height: 100vh; margin: 0; border: 0; border-radius: 0; }
-  .controls { grid-template-columns: 1fr; }
-  .item { grid-template-columns: 1fr; gap: 4px; }
-  .week-head { display: block; }
+
+.week {
+  padding: 1.3rem 0 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.week:first-of-type {
+  border-top: 0;
+}
+
+.week-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.week h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 650;
+}
+
+.week-date {
+  color: var(--sub);
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.rows {
+  display: grid;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 128px 92px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.74rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+.row:first-child {
+  border-top: 0;
+}
+
+.time, .type {
+  color: var(--sub);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.type {
+  color: var(--acc);
+  text-transform: lowercase;
+}
+
+.title {
+  min-width: 0;
+}
+
+.title strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 620;
+  line-height: 1.45;
+}
+
+.title span {
+  display: block;
+  color: var(--sub);
+  font-size: 0.9rem;
+}
+
+mark {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--acc) 18%, transparent);
+  color: inherit;
+  padding: 0 2px;
+}
+
+.empty {
+  display: none;
+  padding: 2rem 0 0;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+}
+
+.notice {
+  margin: 2.6rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 0.86rem;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  main {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    outline: none;
+  }
+
+  .topline {
+    margin-bottom: 2rem;
+  }
+
+  .theme-toggle {
+    margin-left: 0;
+  }
+
+  nav {
+    gap: 1.2rem;
+  }
+
+  .summary, .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+    padding: 0.95rem 0;
+  }
+
+  .week-head {
+    display: block;
+  }
+
+  .week-date {
+    display: block;
+    margin-top: 0.2rem;
+  }
 }
 </style>
 </head>
 <body>
 <main>
   <header>
-    <div class="topbar">
+    <div class="topline">
       <h1>UCLA EMT Course</h1>
       <span class="dot" aria-hidden="true"></span>
-      <span class="status">schedule / summer 2026</span>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <span class="term">summer 2026</span>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path class="sun" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
           <path class="moon" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" style="display:none"></path>
         </svg>
       </button>
     </div>
-    <p class="hero-copy">A compact course timeline for lecture nights, Sunday skills, exam windows, finals, and completion milestones. Verify against the official course system before making plans.</p>
     <nav aria-label="Page links">
-      <a href="https://nikhi1g.github.io/">Home</a>
       <a href="#schedule">Schedule</a>
+      <a href="#exams">Exams</a>
       <a href="#finals">Finals</a>
-      <a href="https://github.com/nikhi1g/ucla-emt-course">Source</a>
+      <a href="https://nikhi1g.github.io/">Home</a>
     </nav>
   </header>
 
-  <section class="quick-stats" aria-label="Course summary">
-    <div class="stat"><strong>9</strong><span>instructional weeks</span></div>
-    <div class="stat"><strong>6</strong><span>unit exam windows</span></div>
-    <div class="stat"><strong>8/30</strong><span>finals testing</span></div>
-    <div class="stat"><strong>9/30</strong><span>course completion</span></div>
+  <section class="summary" aria-label="Course summary">
+    <div><strong>9</strong><span>weeks</span></div>
+    <div><strong>6</strong><span>unit exams</span></div>
+    <div><strong>8/30</strong><span>finals</span></div>
+    <div><strong>9/30</strong><span>completion</span></div>
   </section>
 
-  <section class="controls" aria-label="Schedule filters">
-    <input class="search" id="search" type="search" placeholder="Search airway, trauma, exam, skills..." autocomplete="off">
-    <div class="filters" aria-label="Item type filters">
+  <section class="controls" aria-label="Schedule search and filters">
+    <input id="search" class="search" type="search" placeholder="fuzzy search: airway, bls, trauma, 8/30" autocomplete="off">
+    <div class="filters" aria-label="Type filters">
       <button class="filter is-active" data-filter="all">All</button>
       <button class="filter" data-filter="lecture">Lecture</button>
       <button class="filter" data-filter="skills">Skills</button>
-      <button class="filter" data-filter="exam">Exams</button>
-      <button class="filter" data-filter="assignment">Assignments</button>
+      <button class="filter" data-filter="exam">Exam</button>
+      <button class="filter" data-filter="assignment">Assignment</button>
     </div>
   </section>
+  <p id="result-note" class="result-note" aria-live="polite"></p>
 
-  <section id="schedule" class="schedule" aria-label="Weekly schedule">
+  <section id="schedule" aria-label="Schedule">
+    <h2 class="section-title">Schedule</h2>
+
     <section class="week" data-week>
-      <div class="week-head"><h2>Before the first day</h2><span>setup</span></div>
-      <div class="items">
-        <article class="item" data-type="assignment"><div class="when">Before 6/22</div><div class="item-body"><div class="item-title-row"><h3>Course setup</h3><span class="tag assignment">assignment</span></div><p>Buy required materials, set up Bruin Learn and testing accounts, and complete required platform setup.</p></div></article>
-        <article class="item" data-type="assignment"><div class="when">Before 6/22</div><div class="item-body"><div class="item-title-row"><h3>Pre-course quizzes</h3><span class="tag assignment">assignment</span></div><p>Complete the Course Policy Manual Quiz, HIPAA Quiz, UCLA Clinical Education Quiz, and Demographic Survey.</p></div></article>
+      <div class="week-head"><h3>Before first day</h3><span class="week-date">setup</span></div>
+      <div class="rows">
+        <article class="row" data-type="assignment"><div class="time">Before 6/22</div><div class="type">assignment</div><div class="title"><strong>Course materials, Bruin Learn, testing accounts</strong><span>Complete platform setup.</span></div></article>
+        <article class="row" data-type="assignment"><div class="time">Before 6/22</div><div class="type">assignment</div><div class="title"><strong>Policy Manual Quiz, HIPAA Quiz, Clinical Education Quiz, Demographic Survey</strong></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 1</h2><span>6/22 - 6/28</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 6/22<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 1: Human Body, Medical Terminology, Vital Signs</h3><span class="tag">lecture</span></div><p>Opening foundations for body systems, terminology, and vital signs.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 6/24<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 2: Patient Assessment</h3><span class="tag">lecture</span></div><p>Primary and secondary assessment concepts.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 6/28<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Assessment, vital signs, BLS</h3><span class="tag skills">skills</span></div><p>Primary assessment, lifting and moving, medical secondary assessment, adult BLS, and scene safety simulation.</p></div></article>
-        <article class="item" data-type="assignment"><div class="when">Week 1</div><div class="item-body"><div class="item-title-row"><h3>Read chapters 5, 6, and 10</h3><span class="tag reading">reading</span></div><p>No exam this week.</p></div></article>
+      <div class="week-head"><h3>Week 1</h3><span class="week-date">6/22 - 6/28</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 6/22<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Human Body, Medical Terminology, Vital Signs</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 6/24<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Patient Assessment</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 6/28<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Primary Assessment, Vital Signs, BLS, Lifting and Moving</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 1</div><div class="type">reading</div><div class="title"><strong>Read Ch. 5, 6, 10</strong></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 2</h2><span>6/29 - 7/5</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 6/29<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 3: EMS Systems, Safety, Medical/Legal/Ethical</h3><span class="tag">lecture</span></div><p>Systems, workforce safety, wellness, and medical/legal foundations.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 7/1<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 4: Communications, Documentation, Operations</h3><span class="tag">lecture</span></div><p>Communication, documentation, transport, extrication, incident management, and disaster response.</p></div></article>
-        <article class="item" data-type="assignment"><div class="when">Week 2</div><div class="item-body"><div class="item-title-row"><h3>Operations study guide and modules</h3><span class="tag assignment">assignment</span></div><p>Read chapters 1, 2, 3, 4, 8, 38, 39, 40, and 41. Complete Operations Study Guide and assigned online modules.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">7/1 - 7/12</div><div class="item-body"><div class="item-title-row"><h3>EMS Operations Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 73%. Retake closes 7/19 after remediation.</p></div></article>
+      <div class="week-head"><h3>Week 2</h3><span class="week-date">6/29 - 7/5</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 6/29<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>EMS Systems, Workforce Safety, Medical/Legal/Ethical Issues</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 7/1<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Communication, Documentation, Lifting and Moving, Transport Operations, Extrication, Incident Management</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 2</div><div class="type">assignment</div><div class="title"><strong>Operations Study Guide</strong><span>Read Ch. 1, 2, 3, 4, 8, 38, 39, 40, 41.</span></div></article>
+        <article class="row" data-type="exam" id="exams"><div class="time">7/1 - 7/12</div><div class="type">exam</div><div class="title"><strong>EMS Operations Exam</strong><span>73% passing. Retake closes 7/19.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 3</h2><span>7/6 - 7/12</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 7/6<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 5: Airway Management and Respiratory System</h3><span class="tag">lecture</span></div><p>Airway foundations and respiratory system overview.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 7/8<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 6: Respiratory Emergencies</h3><span class="tag">lecture</span></div><p>Respiratory emergency recognition and treatment priorities.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 7/12<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Oxygen, medications, airway, pediatric BLS</h3><span class="tag skills">skills</span></div><p>Oxygen administration, BVM, airway adjuncts, suctioning, respiratory assessment, and infant/pediatric BLS.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">7/8 - 7/15</div><div class="item-body"><div class="item-title-row"><h3>Airway Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 73%. Retake closes 7/22 after remediation.</p></div></article>
+      <div class="week-head"><h3>Week 3</h3><span class="week-date">7/6 - 7/12</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 7/6<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Airway Management and Respiratory System</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 7/8<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Respiratory Emergencies</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 7/12<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Oxygen, Medication Administration, BGL, BVM, Airway Adjuncts, Suctioning, Pediatric BLS</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 3</div><div class="type">reading</div><div class="title"><strong>Read Ch. 6, 11, 16, 21; Airway Study Guide</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">7/8 - 7/15</div><div class="type">exam</div><div class="title"><strong>Airway Exam</strong><span>73% passing. Retake closes 7/22.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 4</h2><span>7/13 - 7/19</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 7/13<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 7: BLS Resuscitation and Pharmacology</h3><span class="tag">lecture</span></div><p>BLS resuscitation and EMT medication foundations.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 7/15<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 8: Cardiovascular System and Emergencies</h3><span class="tag">lecture</span></div><p>Cardiovascular system review and emergency care.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 7/19<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: BLS testing, cardiac assessment, airway review</h3><span class="tag skills">skills</span></div><p>BLS, ASA/nitro administration, BVM, cardiology medical assessment, vitals, and GCS.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">7/15 - 7/22</div><div class="item-body"><div class="item-title-row"><h3>Cardiology Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 73%. Verify in-person scheduling details in the official system.</p></div></article>
+      <div class="week-head"><h3>Week 4</h3><span class="week-date">7/13 - 7/19</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 7/13<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>BLS Resuscitation and Pharmacology</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 7/15<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Cardiovascular System and Emergencies</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 7/19<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>BLS Testing, ASA/Nitro, BVM, Cardiology Assessment, Vitals, GCS</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 4</div><div class="type">reading</div><div class="title"><strong>Read Ch. 14, 12, 17; Cardiology Study Guide</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">7/15 - 7/22</div><div class="type">exam</div><div class="title"><strong>Cardiology Exam</strong><span>73% passing. Retake closes 7/29.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 5</h2><span>7/20 - 7/26</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 7/20<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 9: Shock and Trauma Overview</h3><span class="tag">lecture</span></div><p>Shock and initial trauma concepts.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 7/22<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 10: Bleeding, Soft-Tissue, Head/Neck/Spine</h3><span class="tag">lecture</span></div><p>Bleeding control and injury care priorities.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 7/26<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Trauma assessment, ALS assist, bleeding control</h3><span class="tag skills">skills</span></div><p>Trauma assessment, complex airway simulations, MegaCode simulations, bandaging, bleeding control, and shock management.</p></div></article>
+      <div class="week-head"><h3>Week 5</h3><span class="week-date">7/20 - 7/26</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 7/20<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Shock and Trauma Overview</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 7/22<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Bleeding, Soft-Tissue Injuries, Head/Neck/Spine Injuries</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 7/26<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Trauma Assessment, ALS Assist, Complex Airway, MegaCode, Bandaging, Bleeding Control</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 5</div><div class="type">assignment</div><div class="title"><strong>Read Ch. 13, 25, 26, 27, 28, 29; Burns Quiz; TBI; SMR</strong></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 6</h2><span>7/27 - 8/2</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 7/27<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 11: Chest, abdominal, orthopedic, environmental trauma</h3><span class="tag">lecture</span></div><p>Trauma systems and regional injury care.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 7/29<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 12: Medical overview, neuro, endocrine, hematology</h3><span class="tag">lecture</span></div><p>Medical overview plus neurological, endocrine, and hematological emergencies.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 8/2<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Splinting, Stop the Bleed, SMR</h3><span class="tag skills">skills</span></div><p>Long bone splinting, Stop the Bleed, trauma assessment, orthostatic vitals, spinal motion restriction, and AMS medications.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">7/27 - 8/2</div><div class="item-body"><div class="item-title-row"><h3>Trauma Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 73%. Retake closes 8/10 after remediation.</p></div></article>
+      <div class="week-head"><h3>Week 6</h3><span class="week-date">7/27 - 8/2</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 7/27<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Chest/Abdominal/GI Injuries, Orthopedic Injuries, Environmental Emergencies</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 7/29<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Medical Overview, Neurological, Endocrine, Hematological Emergencies</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 8/2<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Long Bone Splinting, Stop the Bleed, Trauma Assessment, Orthostatic Vitals, SMR</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 6</div><div class="type">assignment</div><div class="title"><strong>Read Ch. 30, 31, 32, 33, 15, 18, 20; Trauma Study Guide</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">7/27 - 8/2</div><div class="type">exam</div><div class="title"><strong>Trauma Exam</strong><span>73% passing. Retake closes 8/10.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 7</h2><span>8/3 - 8/9</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 8/3<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 13: Behavioral Health and Therapeutic Communication</h3><span class="tag">lecture</span></div><p>Behavioral health, crisis response, and communication.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 8/5<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 14: GI, GU, endocrine, and neuro</h3><span class="tag">lecture</span></div><p>Medical emergency categories and assessment priorities.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 8/9<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Joint splinting, medical assessment, Sager</h3><span class="tag skills">skills</span></div><p>Joint splinting, medical assessment, spinal motion restriction, bleeding simulation, and trauma assessment.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">8/5 - 8/12</div><div class="item-body"><div class="item-title-row"><h3>Medical Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 73%. Retake closes 8/19 after remediation.</p></div></article>
+      <div class="week-head"><h3>Week 7</h3><span class="week-date">8/3 - 8/9</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 8/3<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Behavioral Health and Therapeutic Communication</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 8/5<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Gastrointestinal, Genitourinary, Endocrine, Neuro</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 8/9<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Joint Splinting, Medical Assessment, SMR, Sager Splinting, Bleeding Simulation</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 7</div><div class="type">assignment</div><div class="title"><strong>Read Ch. 22, 23, 19, 21, 24; De-escalation; Behavioral Emergencies</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">8/5 - 8/12</div><div class="type">exam</div><div class="title"><strong>Medical Exam</strong><span>73% passing. Retake closes 8/19.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 8</h2><span>8/10 - 8/16</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 8/10<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 15: OB/Neonatal</h3><span class="tag">lecture</span></div><p>Obstetrics and neonatal care.</p></div></article>
-        <article class="item" data-type="lecture"><div class="when">Wed 8/12<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 16: Lifespan, Pediatrics, Special Populations</h3><span class="tag">lecture</span></div><p>Lifespan development, pediatrics, geriatrics, and special populations.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 8/16<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Pelvic binder, psych first aid, delivery</h3><span class="tag skills">skills</span></div><p>Pelvic binder, psych first aid assessment, geriatric/pediatric SMR, trauma simulations, splinting, and normal emergency delivery.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">8/12 - 8/19</div><div class="item-body"><div class="item-title-row"><h3>Special Populations Exam window</h3><span class="tag exam">exam</span></div><p>Passing score: 70%. Retake closes 8/26 after remediation.</p></div></article>
+      <div class="week-head"><h3>Week 8</h3><span class="week-date">8/10 - 8/16</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 8/10<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>OB/Neonatal</strong></div></article>
+        <article class="row" data-type="lecture"><div class="time">Wed 8/12<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Lifespan Development, Pediatrics, Special Populations</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 8/16<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Pelvic Binder, Psych First Aid, Geriatrics/Peds SMR, Trauma Sims, Delivery</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 8</div><div class="type">assignment</div><div class="title"><strong>Read Ch. 34, 7, 35, 36, 37; Special Populations Study Guide</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">8/12 - 8/19</div><div class="type">exam</div><div class="title"><strong>Special Populations Exam</strong><span>70% passing. Retake closes 8/26.</span></div></article>
       </div>
     </section>
 
     <section class="week" data-week>
-      <div class="week-head"><h2>Week 9</h2><span>8/17 - 8/23</span></div>
-      <div class="items">
-        <article class="item" data-type="lecture"><div class="when">Mon 8/17<br>1800-2100</div><div class="item-body"><div class="item-title-row"><h3>Lecture 17: Final Exam Review and NREMT Process</h3><span class="tag">lecture</span></div><p>Final review, NREMT process, and completion planning.</p></div></article>
-        <article class="item" data-type="skills"><div class="when">Sun 8/23<br>0800-1730</div><div class="item-body"><div class="item-title-row"><h3>Skills: Pediatric sims, splinting, affective assessment, MCI</h3><span class="tag skills">skills</span></div><p>Pediatric medical simulations, splinting practice, abnormal delivery/neonatal resuscitation, BVM/O2/CPAP, and complex MCI.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">By 8/29 noon</div><div class="item-body"><div class="item-title-row"><h3>Finals eligibility checkpoint</h3><span class="tag deadline">deadline</span></div><p>Skills portfolio, evaluations, unit exams, remediation, and listed requirements must be complete to qualify for finals.</p></div></article>
+      <div class="week-head"><h3>Week 9</h3><span class="week-date">8/17 - 8/23</span></div>
+      <div class="rows">
+        <article class="row" data-type="lecture"><div class="time">Mon 8/17<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Final Exam Review and NREMT Process</strong></div></article>
+        <article class="row" data-type="skills"><div class="time">Sun 8/23<br>0800-1730</div><div class="type">skills</div><div class="title"><strong>Pediatric Medical Sims, Splinting, Affective Assessment, Delivery/Neonatal Resuscitation, BVM/O2/CPAP, MCI</strong></div></article>
+        <article class="row" data-type="assignment"><div class="time">Week 9</div><div class="type">assignment</div><div class="title"><strong>Read Ch. 9; Soft Skills; final requirements</strong></div></article>
+        <article class="row" data-type="exam"><div class="time">By 8/29 noon</div><div class="type">deadline</div><div class="title"><strong>Finals eligibility</strong><span>Skills portfolio, evaluations, unit exams, remediation.</span></div></article>
       </div>
     </section>
 
     <section class="week" id="finals" data-week>
-      <div class="week-head"><h2>Finals and completion</h2><span>8/30 - 9/30</span></div>
-      <div class="items">
-        <article class="item" data-type="exam"><div class="when">Sun 8/30<br>0800</div><div class="item-body"><div class="item-title-row"><h3>Finals testing</h3><span class="tag exam">finals</span></div><p>Written final plus skills final covering medical assessment, trauma assessment, one random trauma skill, BVM ventilations, and oxygen administration.</p></div></article>
-        <article class="item" data-type="assignment"><div class="when">After clearance</div><div class="item-body"><div class="item-title-row"><h3>Ride-alongs and patient contacts</h3><span class="tag assignment">requirement</span></div><p>Complete at least 24 total ride-time hours and 10 patient contacts after coordinator clearance.</p></div></article>
-        <article class="item" data-type="exam"><div class="when">Wed 9/30</div><div class="item-body"><div class="item-title-row"><h3>Final course completion deadline</h3><span class="tag deadline">deadline</span></div><p>All course requirements, including ride-alongs, are due for certificate eligibility.</p></div></article>
+      <div class="week-head"><h3>Finals and completion</h3><span class="week-date">8/30 - 9/30</span></div>
+      <div class="rows">
+        <article class="row" data-type="exam"><div class="time">Sun 8/30<br>0800</div><div class="type">finals</div><div class="title"><strong>Finals testing</strong><span>Written final; medical assessment; trauma assessment; random trauma skill; BVM; oxygen administration.</span></div></article>
+        <article class="row" data-type="assignment"><div class="time">After clearance</div><div class="type">requirement</div><div class="title"><strong>Ride-alongs</strong><span>24 ride-time hours; 10 patient contacts.</span></div></article>
+        <article class="row" data-type="exam"><div class="time">Wed 9/30</div><div class="type">deadline</div><div class="title"><strong>Course completion deadline</strong></div></article>
       </div>
     </section>
   </section>
 
-  <p class="notice">This page is a lightweight reference, not the source of record. Use Bruin Learn and official course communications for final dates, locations, and requirements.</p>
+  <p id="empty" class="empty">No matching schedule items.</p>
+  <p class="notice">Reference only. Official course systems remain the source of record.</p>
 </main>
+
 <script>
-const root = document.documentElement;
 const toggle = document.getElementById('theme-toggle');
 const sun = toggle.querySelector('.sun');
 const moon = toggle.querySelector('.moon');
+const root = document.documentElement;
 const search = document.getElementById('search');
 const filters = [...document.querySelectorAll('.filter')];
-const items = [...document.querySelectorAll('.item')];
+const rows = [...document.querySelectorAll('.row')];
 const weeks = [...document.querySelectorAll('[data-week]')];
-let currentFilter = 'all';
+const note = document.getElementById('result-note');
+const empty = document.getElementById('empty');
+let activeFilter = 'all';
+
+rows.forEach((row) => {
+  row.dataset.raw = row.textContent.toLowerCase().replace(/\s+/g, ' ').trim();
+  row.dataset.html = row.querySelector('.title').innerHTML;
+});
 
 function setTheme(theme) {
   root.setAttribute('data-theme', theme);
@@ -354,33 +568,73 @@ function setTheme(theme) {
   moon.style.display = theme === 'dark' ? 'none' : 'block';
 }
 
-function applyFilters() {
-  const query = search.value.trim().toLowerCase();
-  items.forEach((item) => {
-    const type = item.dataset.type;
-    const text = item.textContent.toLowerCase();
-    const typeMatch = currentFilter === 'all' || type === currentFilter || (currentFilter === 'assignment' && type === 'assignment');
-    const queryMatch = !query || text.includes(query);
-    item.classList.toggle('is-hidden', !(typeMatch && queryMatch));
-  });
-  weeks.forEach((week) => {
-    const visible = !!week.querySelector('.item:not(.is-hidden)');
-    week.classList.toggle('is-hidden', !visible);
-  });
+function fuzzyScore(text, query) {
+  if (!query) return 1;
+  let ti = 0;
+  let qi = 0;
+  let score = 0;
+  let streak = 0;
+  while (ti < text.length && qi < query.length) {
+    if (text[ti] === query[qi]) {
+      score += 1 + streak;
+      streak += 1;
+      qi += 1;
+    } else {
+      streak = 0;
+    }
+    ti += 1;
+  }
+  if (qi !== query.length) return 0;
+  if (text.includes(query)) score += query.length * 3;
+  return score;
 }
 
-const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-setTheme(savedTheme);
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-toggle.addEventListener('click', () => {
-  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-});
+function highlight(row, query) {
+  const title = row.querySelector('.title');
+  title.innerHTML = row.dataset.html;
+  if (!query || query.length < 2) return;
+  const pattern = query.split('').map(escapeRegExp).join('.*?');
+  const regex = new RegExp(`(${pattern})`, 'ig');
+  title.innerHTML = title.innerHTML.replace(regex, '<mark>$1</mark>');
+}
+
+function applyFilters() {
+  const query = search.value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  rows.forEach((row) => {
+    const type = row.dataset.type;
+    const typeMatch = activeFilter === 'all' || type === activeFilter || (activeFilter === 'assignment' && type === 'assignment');
+    const score = fuzzyScore(row.dataset.raw, query);
+    const visible = typeMatch && score > 0;
+    row.style.order = query ? String(9999 - score) : '0';
+    row.classList.toggle('is-hidden', !visible);
+    highlight(row, visible ? query : '');
+    if (visible) visibleCount += 1;
+  });
+
+  weeks.forEach((week) => {
+    week.classList.toggle('is-hidden', !week.querySelector('.row:not(.is-hidden)'));
+  });
+
+  empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  note.textContent = query || activeFilter !== 'all' ? `${visibleCount} result${visibleCount === 1 ? '' : 's'}` : '';
+}
+
+const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+setTheme(saved);
+
+toggle.onclick = () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 filters.forEach((button) => {
-  button.addEventListener('click', () => {
-    currentFilter = button.dataset.filter;
+  button.onclick = () => {
+    activeFilter = button.dataset.filter;
     filters.forEach((item) => item.classList.toggle('is-active', item === button));
     applyFilters();
-  });
+  };
 });
 search.addEventListener('input', applyFilters);
 </script>
