@@ -69,7 +69,7 @@ header {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 2.6rem;
+  margin-bottom: 1rem;
 }
 
 h1, h2, h3, p {
@@ -246,10 +246,8 @@ nav a:hover::after, .week-link:hover::after {
 }
 
 .progress {
-  margin-bottom: 1.4rem;
-  padding: 0.55rem 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  margin: 0 0 1.5rem;
+  padding: 0;
 }
 
 .progress-head {
@@ -515,6 +513,20 @@ mark {
         </svg>
       </button>
     </div>
+    <section class="progress" aria-label="Progress sharing">
+      <div class="progress-head">
+        <h2 class="progress-title">Progress key</h2>
+        <div class="progress-meta">
+          <span id="progress-count" class="progress-count">0/46 complete</span>
+          <span id="progress-note" class="progress-note" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="progress-row">
+        <input id="progress-key" class="progress-key" type="text" placeholder="Paste or copy progress key" autocomplete="off" spellcheck="false" aria-label="Progress key">
+        <button id="apply-progress" class="progress-button" type="button">Apply</button>
+        <button id="copy-progress" class="progress-button" type="button" aria-label="Copy progress key">Copy</button>
+      </div>
+    </section>
     <nav aria-label="Page links">
       <a href="#schedule">Schedule</a>
       <a href="#finals">Finals</a>
@@ -539,20 +551,6 @@ mark {
       <button class="filter" data-filter="skills">Skills</button>
       <button class="filter" data-filter="exam">Exam</button>
       <button class="filter" data-filter="assignment">Assignment</button>
-    </div>
-  </section>
-  <section class="progress" aria-label="Progress sharing">
-    <div class="progress-head">
-      <h2 class="progress-title">Progress key</h2>
-      <div class="progress-meta">
-        <span id="progress-count" class="progress-count">0/46 complete</span>
-        <span id="progress-note" class="progress-note" aria-live="polite"></span>
-      </div>
-    </div>
-    <div class="progress-row">
-      <input id="progress-key" class="progress-key" type="text" placeholder="Paste or copy progress key" autocomplete="off" spellcheck="false" aria-label="Progress key">
-      <button id="apply-progress" class="progress-button" type="button">Apply</button>
-      <button id="copy-progress" class="progress-button" type="button" aria-label="Copy progress key">Copy</button>
     </div>
   </section>
   <p id="result-note" class="result-note" aria-live="polite"></p>
