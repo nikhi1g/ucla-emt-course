@@ -180,7 +180,7 @@ nav a:hover::after, .week-link:hover::after {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: center;
-  margin-bottom: 2.4rem;
+  margin-bottom: 0.75rem;
   padding: 1rem 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -246,8 +246,9 @@ nav a:hover::after, .week-link:hover::after {
 }
 
 .progress {
-  margin-bottom: 2.4rem;
-  padding: 1rem 0;
+  margin-bottom: 1.4rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
@@ -256,48 +257,56 @@ nav a:hover::after, .week-link:hover::after {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.45rem;
 }
 
 .progress-title {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
+.progress-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
 .progress-count, .progress-note {
   color: var(--sub);
-  font-size: 0.86rem;
+  font-size: 0.75rem;
 }
 
 .progress-row {
   display: flex;
   gap: 0.55rem;
   flex-wrap: wrap;
-  margin-top: 0.55rem;
+  margin-top: 0;
 }
 
 .progress-key {
   flex: 1 1 240px;
   min-width: 0;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--bg);
   color: var(--fg);
   font: inherit;
-  padding: 8px 10px;
+  padding: 5px 8px;
+  font-size: 0.82rem;
 }
 
 .progress-button {
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--bg);
   color: var(--sub);
   cursor: pointer;
   font: inherit;
-  padding: 8px 12px;
+  padding: 5px 9px;
+  font-size: 0.8rem;
 }
 
 .progress-button:hover {
@@ -306,8 +315,7 @@ nav a:hover::after, .week-link:hover::after {
 }
 
 .progress-note {
-  min-height: 1.3rem;
-  margin: 0.45rem 0 0;
+  margin: 0;
 }
 
 .section-title {
@@ -536,17 +544,16 @@ mark {
   <section class="progress" aria-label="Progress sharing">
     <div class="progress-head">
       <h2 class="progress-title">Progress key</h2>
-      <span id="progress-count" class="progress-count">0/46 complete</span>
+      <div class="progress-meta">
+        <span id="progress-count" class="progress-count">0/46 complete</span>
+        <span id="progress-note" class="progress-note" aria-live="polite"></span>
+      </div>
     </div>
     <div class="progress-row">
-      <input id="progress-key" class="progress-key" type="text" readonly aria-label="Current progress key">
-      <button id="copy-progress" class="progress-button" type="button">Copy</button>
-    </div>
-    <div class="progress-row">
-      <input id="progress-import" class="progress-key" type="text" placeholder="Paste a progress key" autocomplete="off" spellcheck="false" aria-label="Paste a progress key">
+      <input id="progress-key" class="progress-key" type="text" placeholder="Paste or copy progress key" autocomplete="off" spellcheck="false" aria-label="Progress key">
       <button id="apply-progress" class="progress-button" type="button">Apply</button>
+      <button id="copy-progress" class="progress-button" type="button" aria-label="Copy progress key">Copy</button>
     </div>
-    <p id="progress-note" class="progress-note" aria-live="polite"></p>
   </section>
   <p id="result-note" class="result-note" aria-live="polite"></p>
 
@@ -681,7 +688,6 @@ const weeks = [...document.querySelectorAll('[data-week]')];
 const note = document.getElementById('result-note');
 const empty = document.getElementById('empty');
 const progressKey = document.getElementById('progress-key');
-const progressImport = document.getElementById('progress-import');
 const progressNote = document.getElementById('progress-note');
 const progressCount = document.getElementById('progress-count');
 const completionCount = document.getElementById('completion-count');
@@ -691,6 +697,8 @@ const progressRows = [];
 const progressStorageKey = 'ucla-emt-progress-v1';
 const progressVersion = 'v1';
 let activeFilter = 'all';
+let progressKeyDirty = false;
+let copyResetTimer;
 
 rows.forEach((row) => {
   row.dataset.raw = row.textContent.toLowerCase().replace(/\s+/g, ' ').trim();
@@ -835,7 +843,7 @@ function setProgressFromBytes(bytes) {
 function renderProgress(save = true) {
   const checkedCount = progressRows.filter((item) => item.checkbox.checked).length;
   const token = encodeProgress();
-  progressKey.value = token;
+  if (!progressKeyDirty) progressKey.value = token;
   progressCount.textContent = `${checkedCount}/${progressRows.length} complete`;
   completionCount.textContent = `${checkedCount}/${progressRows.length}`;
   if (save) localStorage.setItem(progressStorageKey, token);
@@ -844,8 +852,8 @@ function renderProgress(save = true) {
 function applyProgressToken(value, showNote = true) {
   try {
     setProgressFromBytes(decodeProgress(value));
+    progressKeyDirty = false;
     renderProgress();
-    progressImport.value = '';
     if (showNote) progressNote.textContent = 'Progress restored.';
   } catch (error) {
     progressNote.textContent = error.message;
@@ -891,18 +899,37 @@ filters.forEach((button) => {
   };
 });
 search.addEventListener('input', applyFilters);
-applyProgress.onclick = () => applyProgressToken(progressImport.value);
-progressImport.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') applyProgressToken(progressImport.value);
+progressKey.addEventListener('input', () => {
+  progressKeyDirty = true;
+  progressNote.textContent = '';
 });
+applyProgress.onclick = () => applyProgressToken(progressKey.value);
+progressKey.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') applyProgressToken(progressKey.value);
+});
+
+function showCopied() {
+  clearTimeout(copyResetTimer);
+  copyProgress.textContent = 'Copied ✓';
+  copyProgress.setAttribute('aria-label', 'Progress key copied');
+  copyResetTimer = setTimeout(() => {
+    copyProgress.textContent = 'Copy';
+    copyProgress.setAttribute('aria-label', 'Copy progress key');
+  }, 1400);
+}
+
 copyProgress.onclick = async () => {
+  const token = encodeProgress();
+  progressKey.value = token;
+  progressKeyDirty = false;
   try {
-    await navigator.clipboard.writeText(progressKey.value);
-    progressNote.textContent = 'Progress key copied.';
+    await navigator.clipboard.writeText(token);
+    showCopied();
   } catch (error) {
     progressKey.focus();
     progressKey.select();
-    progressNote.textContent = document.execCommand('copy') ? 'Progress key copied.' : 'Select the key to copy it.';
+    if (document.execCommand('copy')) showCopied();
+    else progressNote.textContent = 'Select the key to copy it.';
   }
 };
 applyFilters();
