@@ -820,13 +820,15 @@ function encodeProgress() {
   });
   let usedLength = bytes.length;
   while (usedLength > 0 && bytes[usedLength - 1] === 0) usedLength -= 1;
-  return `${progressVersion}-${bytesToBase64Url(bytes.slice(0, usedLength))}`;
+  return bytesToBase64Url(bytes.slice(0, usedLength));
 }
 
 function decodeProgress(value) {
   const normalized = value.trim().replace(/^#/, '');
-  if (!normalized.startsWith(`${progressVersion}-`)) throw new Error('Unsupported progress key');
-  const bytes = base64UrlToBytes(normalized.slice(progressVersion.length + 1));
+  const encoded = normalized.startsWith(`${progressVersion}-`)
+    ? normalized.slice(progressVersion.length + 1)
+    : normalized;
+  const bytes = base64UrlToBytes(encoded);
   if (bytes.length > Math.ceil(progressRows.length / 8)) throw new Error('Progress key is for another schedule');
   return bytes;
 }
