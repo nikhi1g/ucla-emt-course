@@ -245,6 +245,71 @@ nav a:hover::after, .week-link:hover::after {
   font-size: 0.86rem;
 }
 
+.progress {
+  margin-bottom: 2.4rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.progress-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.progress-count, .progress-note {
+  color: var(--sub);
+  font-size: 0.86rem;
+}
+
+.progress-row {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-top: 0.55rem;
+}
+
+.progress-key {
+  flex: 1 1 240px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  padding: 8px 10px;
+}
+
+.progress-button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--sub);
+  cursor: pointer;
+  font: inherit;
+  padding: 8px 12px;
+}
+
+.progress-button:hover {
+  border-color: var(--acc);
+  color: var(--acc);
+}
+
+.progress-note {
+  min-height: 1.3rem;
+  margin: 0.45rem 0 0;
+}
+
 .section-title {
   color: var(--sub);
   font-size: 0.95rem;
@@ -275,6 +340,37 @@ nav a:hover::after, .week-link:hover::after {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 650;
+}
+
+.week-toggle, .item-toggle {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0 0.45rem 0 0;
+  accent-color: var(--acc);
+  vertical-align: -0.08em;
+}
+
+.week-toggle.is-indeterminate {
+  appearance: none;
+  position: relative;
+  border: 1px solid var(--acc);
+  border-radius: 3px;
+  background: var(--acc);
+}
+
+.week-toggle.is-indeterminate::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  width: 60%;
+  height: 2px;
+  background: var(--bg);
+  transform: translateY(-50%);
+}
+
+.item-toggle {
+  margin-left: 0;
 }
 
 .week-date {
@@ -421,7 +517,7 @@ mark {
     <div><strong>9</strong><span>weeks</span></div>
     <div><strong>6</strong><span>unit exams</span></div>
     <div><strong>8/30</strong><span>finals</span></div>
-    <div><strong>9/30</strong><span>completion</span></div>
+    <div><strong id="completion-count">0/46</strong><span>completed</span></div>
   </section>
 
   <section class="controls" aria-label="Schedule search and filters">
@@ -437,12 +533,27 @@ mark {
       <button class="filter" data-filter="assignment">Assignment</button>
     </div>
   </section>
+  <section class="progress" aria-label="Progress sharing">
+    <div class="progress-head">
+      <h2 class="progress-title">Progress key</h2>
+      <span id="progress-count" class="progress-count">0/46 complete</span>
+    </div>
+    <div class="progress-row">
+      <input id="progress-key" class="progress-key" type="text" readonly aria-label="Current progress key">
+      <button id="copy-progress" class="progress-button" type="button">Copy</button>
+    </div>
+    <div class="progress-row">
+      <input id="progress-import" class="progress-key" type="text" placeholder="Paste a progress key" autocomplete="off" spellcheck="false" aria-label="Paste a progress key">
+      <button id="apply-progress" class="progress-button" type="button">Apply</button>
+    </div>
+    <p id="progress-note" class="progress-note" aria-live="polite"></p>
+  </section>
   <p id="result-note" class="result-note" aria-live="polite"></p>
 
   <section id="schedule" aria-label="Schedule">
     <h2 class="section-title">Schedule</h2>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="setup">
       <div class="week-head"><h3>Before first day</h3><span class="week-date">setup</span></div>
       <div class="rows">
         <article class="row" data-type="assignment"><div class="time">Before 6/22</div><div class="type">assignment</div><div class="title"><strong>Course materials, Bruin Learn, testing accounts</strong><span>Complete platform setup.</span></div></article>
@@ -450,7 +561,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-1">
       <div class="week-head"><h3>Week 1</h3><span class="week-date">6/22 - 6/28</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 6/22<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Human Body, Medical Terminology, Vital Signs</strong></div></article>
@@ -460,7 +571,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-2">
       <div class="week-head"><h3>Week 2</h3><span class="week-date">6/29 - 7/5</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 6/29<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>EMS Systems, Workforce Safety, Medical/Legal/Ethical Issues</strong></div></article>
@@ -470,7 +581,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-3">
       <div class="week-head"><h3>Week 3</h3><span class="week-date">7/6 - 7/12</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 7/6<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Airway Management and Respiratory System</strong></div></article>
@@ -481,7 +592,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-4">
       <div class="week-head"><h3>Week 4</h3><span class="week-date">7/13 - 7/19</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 7/13<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>BLS Resuscitation and Pharmacology</strong></div></article>
@@ -492,7 +603,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-5">
       <div class="week-head"><h3>Week 5</h3><span class="week-date">7/20 - 7/26</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 7/20<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Shock and Trauma Overview</strong></div></article>
@@ -502,7 +613,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-6">
       <div class="week-head"><h3>Week 6</h3><span class="week-date">7/27 - 8/2</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 7/27<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Chest/Abdominal/GI Injuries, Orthopedic Injuries, Environmental Emergencies</strong></div></article>
@@ -513,7 +624,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-7">
       <div class="week-head"><h3>Week 7</h3><span class="week-date">8/3 - 8/9</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 8/3<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Behavioral Health and Therapeutic Communication</strong></div></article>
@@ -524,7 +635,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-8">
       <div class="week-head"><h3>Week 8</h3><span class="week-date">8/10 - 8/16</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 8/10<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>OB/Neonatal</strong></div></article>
@@ -535,7 +646,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" data-week>
+    <section class="week" data-week data-progress-group="week-9">
       <div class="week-head"><h3>Week 9</h3><span class="week-date">8/17 - 8/23</span></div>
       <div class="rows">
         <article class="row" data-type="lecture"><div class="time">Mon 8/17<br>1800-2100</div><div class="type">lecture</div><div class="title"><strong>Final Exam Review and NREMT Process</strong></div></article>
@@ -545,7 +656,7 @@ mark {
       </div>
     </section>
 
-    <section class="week" id="finals" data-week>
+    <section class="week" id="finals" data-week data-progress-group="finals">
       <div class="week-head"><h3>Finals and completion</h3><span class="week-date">8/30 - 9/30</span></div>
       <div class="rows">
         <article class="row" data-type="exam"><div class="time">Sun 8/30<br>0800</div><div class="type">finals</div><div class="title"><strong>Finals testing</strong><span>Written final; medical assessment; trauma assessment; random trauma skill; BVM; oxygen administration.</span></div></article>
@@ -569,6 +680,16 @@ const rows = [...document.querySelectorAll('.row')];
 const weeks = [...document.querySelectorAll('[data-week]')];
 const note = document.getElementById('result-note');
 const empty = document.getElementById('empty');
+const progressKey = document.getElementById('progress-key');
+const progressImport = document.getElementById('progress-import');
+const progressNote = document.getElementById('progress-note');
+const progressCount = document.getElementById('progress-count');
+const completionCount = document.getElementById('completion-count');
+const copyProgress = document.getElementById('copy-progress');
+const applyProgress = document.getElementById('apply-progress');
+const progressRows = [];
+const progressStorageKey = 'ucla-emt-progress-v1';
+const progressVersion = 'v1';
 let activeFilter = 'all';
 
 rows.forEach((row) => {
@@ -610,11 +731,125 @@ function escapeRegExp(value) {
 
 function highlight(row, query) {
   const title = row.querySelector('.title');
-  title.innerHTML = row.dataset.html;
-  if (!query || query.length < 2) return;
-  const pattern = query.split('').map(escapeRegExp).join('.*?');
-  const regex = new RegExp(`(${pattern})`, 'ig');
-  title.innerHTML = title.innerHTML.replace(regex, '<mark>$1</mark>');
+  const itemToggle = title.querySelector('.item-toggle');
+  let html = row.dataset.html;
+  if (query && query.length >= 2) {
+    const pattern = query.split('').map(escapeRegExp).join('.*?');
+    const regex = new RegExp(`(${pattern})`, 'ig');
+    html = html.replace(regex, '<mark>$1</mark>');
+  }
+  title.innerHTML = html;
+  if (itemToggle) title.querySelector('strong').prepend(itemToggle);
+}
+
+function updateWeekToggle(week) {
+  const weekToggle = week.querySelector('.week-toggle');
+  const itemToggles = [...week.querySelectorAll('.item-toggle')];
+  const checkedCount = itemToggles.filter((item) => item.checked).length;
+  const isMixed = checkedCount > 0 && checkedCount < itemToggles.length;
+  weekToggle.checked = checkedCount === itemToggles.length;
+  weekToggle.indeterminate = isMixed;
+  weekToggle.classList.toggle('is-indeterminate', isMixed);
+  weekToggle.setAttribute('aria-checked', isMixed ? 'mixed' : String(weekToggle.checked));
+}
+
+function setupProgress() {
+  weeks.forEach((week) => {
+    const groupId = week.dataset.progressGroup;
+    const heading = week.querySelector('.week-head h3');
+    const weekToggle = document.createElement('input');
+    weekToggle.className = 'week-toggle';
+    weekToggle.type = 'checkbox';
+    weekToggle.setAttribute('aria-label', `Mark ${heading.textContent.trim()} complete`);
+    heading.prepend(weekToggle);
+
+    [...week.querySelectorAll('.row')].forEach((row, itemIndex) => {
+      const title = row.querySelector('.title');
+      const strong = title.querySelector('strong');
+      const itemToggle = document.createElement('input');
+      itemToggle.className = 'item-toggle';
+      itemToggle.type = 'checkbox';
+      itemToggle.setAttribute('aria-label', `Mark ${strong.textContent.trim()} complete`);
+      strong.prepend(itemToggle);
+      const progressId = `${groupId}-${itemIndex + 1}`;
+      row.dataset.progressId = progressId;
+      progressRows.push({
+        id: progressId,
+        checkbox: itemToggle,
+        week,
+      });
+      itemToggle.addEventListener('change', () => {
+        updateWeekToggle(week);
+        renderProgress();
+      });
+    });
+
+    weekToggle.addEventListener('change', () => {
+      week.querySelectorAll('.item-toggle').forEach((item) => {
+        item.checked = weekToggle.checked;
+      });
+      updateWeekToggle(week);
+      renderProgress();
+    });
+  });
+}
+
+function bytesToBase64Url(bytes) {
+  let binary = '';
+  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64UrlToBytes(value) {
+  if (value && !/^[A-Za-z0-9_-]+$/.test(value)) throw new Error('Invalid progress key');
+  const padded = value.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((value.length + 3) % 4);
+  const binary = atob(padded);
+  return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+}
+
+function encodeProgress() {
+  const bytes = new Uint8Array(Math.ceil(progressRows.length / 8));
+  progressRows.forEach((item, index) => {
+    if (item.checkbox.checked) bytes[Math.floor(index / 8)] |= 1 << (index % 8);
+  });
+  let usedLength = bytes.length;
+  while (usedLength > 0 && bytes[usedLength - 1] === 0) usedLength -= 1;
+  return `${progressVersion}-${bytesToBase64Url(bytes.slice(0, usedLength))}`;
+}
+
+function decodeProgress(value) {
+  const normalized = value.trim().replace(/^#/, '');
+  if (!normalized.startsWith(`${progressVersion}-`)) throw new Error('Unsupported progress key');
+  const bytes = base64UrlToBytes(normalized.slice(progressVersion.length + 1));
+  if (bytes.length > Math.ceil(progressRows.length / 8)) throw new Error('Progress key is for another schedule');
+  return bytes;
+}
+
+function setProgressFromBytes(bytes) {
+  progressRows.forEach((item, index) => {
+    item.checkbox.checked = Boolean(bytes[Math.floor(index / 8)] & (1 << (index % 8)));
+  });
+  weeks.forEach(updateWeekToggle);
+}
+
+function renderProgress(save = true) {
+  const checkedCount = progressRows.filter((item) => item.checkbox.checked).length;
+  const token = encodeProgress();
+  progressKey.value = token;
+  progressCount.textContent = `${checkedCount}/${progressRows.length} complete`;
+  completionCount.textContent = `${checkedCount}/${progressRows.length}`;
+  if (save) localStorage.setItem(progressStorageKey, token);
+}
+
+function applyProgressToken(value, showNote = true) {
+  try {
+    setProgressFromBytes(decodeProgress(value));
+    renderProgress();
+    progressImport.value = '';
+    if (showNote) progressNote.textContent = 'Progress restored.';
+  } catch (error) {
+    progressNote.textContent = error.message;
+  }
 }
 
 function applyFilters() {
@@ -640,8 +875,12 @@ function applyFilters() {
   note.textContent = query || activeFilter !== 'all' ? `${visibleCount} result${visibleCount === 1 ? '' : 's'}` : '';
 }
 
-const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-setTheme(saved);
+const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+setTheme(savedTheme);
+setupProgress();
+const savedProgress = localStorage.getItem(progressStorageKey);
+if (savedProgress) applyProgressToken(savedProgress, false);
+else renderProgress();
 
 toggle.onclick = () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 filters.forEach((button) => {
@@ -652,6 +891,21 @@ filters.forEach((button) => {
   };
 });
 search.addEventListener('input', applyFilters);
+applyProgress.onclick = () => applyProgressToken(progressImport.value);
+progressImport.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') applyProgressToken(progressImport.value);
+});
+copyProgress.onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(progressKey.value);
+    progressNote.textContent = 'Progress key copied.';
+  } catch (error) {
+    progressKey.focus();
+    progressKey.select();
+    progressNote.textContent = document.execCommand('copy') ? 'Progress key copied.' : 'Select the key to copy it.';
+  }
+};
+applyFilters();
 </script>
 </body>
 </html>
