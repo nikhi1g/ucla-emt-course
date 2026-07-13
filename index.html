@@ -153,26 +153,27 @@ nav a:hover::after, .week-link:hover::after {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   overflow: hidden;
-  margin: 0 0 2.8rem;
+  margin: 0 0 2rem;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--line);
 }
 
 .summary div {
-  padding: 14px 16px;
+  padding: 10px 12px;
   background: var(--bg);
 }
 
 .summary strong {
-  display: block;
-  font-size: 1.35rem;
+  display: inline;
+  margin-right: 0.25rem;
+  font-size: 1.1rem;
   line-height: 1;
 }
 
 .summary span {
   color: var(--sub);
-  font-size: 0.84rem;
+  font-size: 0.76rem;
 }
 
 .controls {
@@ -477,7 +478,24 @@ mark {
     gap: 1.2rem;
   }
 
-  .summary, .controls {
+  .summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .summary div {
+    padding: 9px 7px;
+    white-space: nowrap;
+  }
+
+  .summary strong {
+    font-size: 0.98rem;
+  }
+
+  .summary span {
+    font-size: 0.66rem;
+  }
+
+  .controls {
     grid-template-columns: 1fr;
   }
 
