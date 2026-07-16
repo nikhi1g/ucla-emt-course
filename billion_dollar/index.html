@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A static index of 89 influential papers, essays, memos, decks, and reports.">
+<title>Billion Dollar PDFs</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%233b82f6%22/></svg>">
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #24292f;
+  --acc: #0969da;
+  --sub: #57606a;
+  --line: #d0d7de;
+  --soft: #f6f8fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #22272e;
+    --fg: #adbac7;
+    --acc: #539bf5;
+    --sub: #768390;
+    --line: #636e7b;
+    --soft: #2d333b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  width: min(960px, calc(100% - 40px));
+  margin: clamp(24px, 5vw, 64px) auto;
+  padding: clamp(24px, 5vw, 48px);
+  outline: 1px solid var(--sub);
+  border-radius: 12px;
+  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+  margin-bottom: 2.5rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: var(--sub);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.back-link:hover {
+  color: var(--acc);
+}
+
+h1, h2, p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.6rem;
+  font-size: clamp(2.2rem, 5vw, 3.7rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.intro {
+  max-width: 620px;
+  margin-bottom: 0;
+  color: var(--sub);
+}
+
+.archive-count {
+  margin: 0 0 1rem;
+  color: var(--acc);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.archive-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: archive;
+  border-top: 1px solid var(--line);
+}
+
+.archive-list li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 0 1.05rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  counter-increment: archive;
+}
+
+.archive-list li::before {
+  content: counter(archive, decimal-leading-zero);
+  padding-top: 0.1rem;
+  color: var(--sub);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.entry-link {
+  display: inline;
+  color: var(--fg);
+  font-size: 1.05rem;
+  font-weight: 620;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--acc) 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.entry-link:hover,
+.entry-link:focus-visible {
+  color: var(--acc);
+  text-decoration-color: var(--acc);
+}
+
+.entry-meta {
+  margin: 0.25rem 0 0;
+  color: var(--sub);
+  font-size: 0.82rem;
+}
+
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 0.8rem;
+}
+
+footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 640px) {
+  main {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    outline: none;
+  }
+
+  .archive-list li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <a class="back-link" href="../" aria-label="Back to UCLA EMT Course">← UCLA EMT Course</a>
+    <p class="archive-count">89 original documents</p>
+    <h1>Billion Dollar PDFs</h1>
+    <p class="intro">Papers, essays, memos, decks, and reports preserved in the directory’s displayed order. Each title links directly to its original publication.</p>
+  </header>
+
+  <ol class="archive-list" aria-label="Billion Dollar PDF documents">
+      <li>
+        <a class="entry-link" href="https://bitcoin.org/bitcoin.pdf" target="_blank" rel="noopener noreferrer">Bitcoin: A Peer-to-Peer Electronic Cash System</a>
+        <p class="entry-meta">Satoshi Nakamoto · 2008 · Whitepaper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">Attention Is All You Need</a>
+        <p class="entry-meta">Vaswani et al. (Google) · 2017 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://situational-awareness.ai/" target="_blank" rel="noopener noreferrer">Situational Awareness: The Decade Ahead</a>
+        <p class="entry-meta">Leopold Aschenbrenner · 2024 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.journals.uchicago.edu/doi/10.1086/260062" target="_blank" rel="noopener noreferrer">The Pricing of Options and Corporate Liabilities</a>
+        <p class="entry-meta">Fischer Black, Myron Scholes · 1973 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://a16z.com/why-software-is-eating-the-world/" target="_blank" rel="noopener noreferrer">Why Software Is Eating the World</a>
+        <p class="entry-meta">Marc Andreessen · 2011 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.tesla.com/en_in/secret-master-plan" target="_blank" rel="noopener noreferrer">The Secret Tesla Motors Master Plan (just between you and me)</a>
+        <p class="entry-meta">Elon Musk · 2006 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://ethereum.org/en/whitepaper/" target="_blank" rel="noopener noreferrer">Ethereum Whitepaper: A Next-Generation Smart Contract Platform</a>
+        <p class="entry-meta">Vitalik Buterin · 2013 · Whitepaper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="http://news.bbc.co.uk/2/shared/bsp/hi/pdfs/18_06_08_internet%20tidal%20wave.pdf" target="_blank" rel="noopener noreferrer">The Internet Tidal Wave</a>
+        <p class="entry-meta">Bill Gates · 1995 · Memo · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://snap.stanford.edu/class/cs224w-readings/Brin98Anatomy.pdf" target="_blank" rel="noopener noreferrer">The Anatomy of a Large-Scale Hypertextual Web Search Engine</a>
+        <p class="entry-meta">Sergey Brin, Lawrence Page · 1998 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.sequoiacap.com/article/rip-good-times/" target="_blank" rel="noopener noreferrer">RIP Good Times</a>
+        <p class="entry-meta">Sequoia Capital · 2008 · Deck · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.superinvesting.com/pdf/The-Superinvestors-of-Graham-and-Doddsville-by-Warren-Buffett.pdf" target="_blank" rel="noopener noreferrer">The Superinvestors of Graham-and-Doddsville</a>
+        <p class="entry-meta">Warren Buffett · 1984 · Essay · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html" target="_blank" rel="noopener noreferrer">ImageNet Classification with Deep Convolutional Neural Networks (AlexNet)</a>
+        <p class="entry-meta">Krizhevsky, Sutskever, Hinton · 2012 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank" rel="noopener noreferrer">The Bitter Lesson</a>
+        <p class="entry-meta">Rich Sutton · 2019 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener noreferrer">Language Models are Few-Shot Learners (GPT-3)</a>
+        <p class="entry-meta">Brown et al. (OpenAI) · 2020 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://w3.org/History/1989/proposal.html" target="_blank" rel="noopener noreferrer">Information Management: A Proposal</a>
+        <p class="entry-meta">Tim Berners-Lee · 1989 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.michael-burry.com/scion-capital-michael-burrys-letters-to-investors/" target="_blank" rel="noopener noreferrer">Scion Capital Letters (Subprime Short)</a>
+        <p class="entry-meta">Michael Burry · 2006 · Letter · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://blakemasters.tumblr.com/peter-thiels-cs183-startup" target="_blank" rel="noopener noreferrer">Zero to One</a>
+        <p class="entry-meta">Peter Thiel &amp; Blake Masters · 2014 · Book · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.sequoiacap.com/wp-content/uploads/sites/6/2022/06/Adapting-to-Endure_Sequoia-Capital-2022.pdf" target="_blank" rel="noopener noreferrer">Adapting to Endure</a>
+        <p class="entry-meta">Sequoia Capital · 2022 · Deck · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://paulgraham.com/ds.html" target="_blank" rel="noopener noreferrer">Do Things That Don't Scale</a>
+        <p class="entry-meta">Paul Graham · 2013 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://paulgraham.com/startupideas.html" target="_blank" rel="noopener noreferrer">How to Get Startup Ideas</a>
+        <p class="entry-meta">Paul Graham · 2012 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.wsj.com/articles/peter-thiel-competition-is-for-losers-1410535536" target="_blank" rel="noopener noreferrer">Competition Is for Losers</a>
+        <p class="entry-meta">Peter Thiel · 2014 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://stratechery.com/2015/aggregation-theory/" target="_blank" rel="noopener noreferrer">Aggregation Theory</a>
+        <p class="entry-meta">Ben Thompson · 2015 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://abovethecrowd.com/2012/11/13/all-markets-are-not-created-equal-10-factors-to-consider-when-evaluating-digital-marketplaces/" target="_blank" rel="noopener noreferrer">All Markets Are Not Created Equal / Note to Self on TAM</a>
+        <p class="entry-meta">Bill Gurley · 2012 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://kk.org/thetechnium/1000-true-fans/" target="_blank" rel="noopener noreferrer">1,000 True Fans</a>
+        <p class="entry-meta">Kevin Kelly · 2008 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://hbr.org/2016/04/blitzscaling" target="_blank" rel="noopener noreferrer">Blitzscaling</a>
+        <p class="entry-meta">Reid Hoffman &amp; Chris Yeh · 2016 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://cdixon.org/2010/01/03/the-next-big-thing-will-start-out-looking-like-a-toy" target="_blank" rel="noopener noreferrer">The Next Big Thing Will Start Out Looking Like a Toy</a>
+        <p class="entry-meta">Chris Dixon · 2010 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://onezero.medium.com/why-decentralization-matters-5e3f79f7638e" target="_blank" rel="noopener noreferrer">Why Decentralization Matters</a>
+        <p class="entry-meta">Chris Dixon · 2018 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.eugenewei.com/blog/2018/5/21/invisible-asymptotes" target="_blank" rel="noopener noreferrer">Invisible Asymptotes</a>
+        <p class="entry-meta">Eugene Wei · 2018 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://foundersfund.com/the-future/" target="_blank" rel="noopener noreferrer">What Happened to the Future?</a>
+        <p class="entry-meta">Founders Fund (Bruce Gibney) · 2011 · Manifesto · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://greylock.com/greymatter/the-new-moats/" target="_blank" rel="noopener noreferrer">The New Moats</a>
+        <p class="entry-meta">Jerry Chen · 2016 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.forentrepreneurs.com/saas-metrics-2/" target="_blank" rel="noopener noreferrer">SaaS Metrics 2.0</a>
+        <p class="entry-meta">David Skok · 2013 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://hackmd.io/@HaydenAdams/HJ9jLsfTz" target="_blank" rel="noopener noreferrer">Uniswap Whitepaper (Automated Market Maker)</a>
+        <p class="entry-meta">Hayden Adams · 2018 · Whitepaper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener noreferrer">Scaling Laws for Neural Language Models</a>
+        <p class="entry-meta">Kaplan et al. (OpenAI) · 2020 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/2203.15556" target="_blank" rel="noopener noreferrer">Training Compute-Optimal Large Language Models (Chinchilla)</a>
+        <p class="entry-meta">Hoffmann et al. (DeepMind) · 2022 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener noreferrer">DeepSeek-R1: Incentivizing Reasoning Capability via RL</a>
+        <p class="entry-meta">DeepSeek · 2025 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://karpathy.medium.com/software-2-0-a64152b37c35" target="_blank" rel="noopener noreferrer">Software 2.0</a>
+        <p class="entry-meta">Andrej Karpathy · 2017 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://moores.samaltman.com/" target="_blank" rel="noopener noreferrer">Moore's Law for Everything</a>
+        <p class="entry-meta">Sam Altman · 2021 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://a16z.com/ai-will-save-the-world/" target="_blank" rel="noopener noreferrer">Why AI Will Save the World</a>
+        <p class="entry-meta">Marc Andreessen · 2023 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.darioamodei.com/essay/machines-of-loving-grace" target="_blank" rel="noopener noreferrer">Machines of Loving Grace</a>
+        <p class="entry-meta">Dario Amodei · 2024 · Essay · AI Essay</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.oaktreecapital.com/insights/memo/sea-change" target="_blank" rel="noopener noreferrer">Sea Change</a>
+        <p class="entry-meta">Howard Marks · 2022 · Memo · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.oaktreecapital.com/insights/memo/the-race-to-the-bottom" target="_blank" rel="noopener noreferrer">The Race to the Bottom</a>
+        <p class="entry-meta">Howard Marks · 2007 · Memo · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://static.bullionstar.com/blogs/uploads/2022/03/Bretton-Woods-III-Zoltan-Pozsar.pdf" target="_blank" rel="noopener noreferrer">Bretton Woods III</a>
+        <p class="entry-meta">Zoltan Pozsar · 2022 · Memo · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://asiabusinesscouncil.org/wp-content/uploads/2020/10/The-Changing-World-Order_Ray-Dalio.pdf" target="_blank" rel="noopener noreferrer">The Changing World Order</a>
+        <p class="entry-meta">Ray Dalio · 2020 · Essay · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.gmo.com/americas/research-library/waiting-for-the-last-dance/" target="_blank" rel="noopener noreferrer">Waiting for the Last Dance</a>
+        <p class="entry-meta">Jeremy Grantham · 2021 · Memo · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.nytimes.com/2008/10/17/opinion/17buffett.html" target="_blank" rel="noopener noreferrer">Buy American. I Am.</a>
+        <p class="entry-meta">Warren Buffett · 2008 · Op-Ed · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.lynalden.com/fraying-petrodollar-system/" target="_blank" rel="noopener noreferrer">The Fraying of the US Global Currency Reserve System</a>
+        <p class="entry-meta">Lyn Alden · 2020 · Essay · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://factsaboutherbalife.com/" target="_blank" rel="noopener noreferrer">Who Wants to Be a Millionaire? (Herbalife Short)</a>
+        <p class="entry-meta">Bill Ackman / Pershing Square · 2012 · Deck · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.marketfolly.com/2010/05/david-einhorns-ira-sohn-presentation.html" target="_blank" rel="noopener noreferrer">Lehman Brothers Short Thesis (Ira Sohn)</a>
+        <p class="entry-meta">David Einhorn / Greenlight · 2008 · Presentation · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.govinfo.gov/content/pkg/CHRG-107hhrg77986/pdf/CHRG-107hhrg77986.pdf" target="_blank" rel="noopener noreferrer">Enron Short Thesis</a>
+        <p class="entry-meta">Jim Chanos / Kynikos · 2001 · Research · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://muddywatersresearch.com/wp-content/uploads/2011/06/MW_TRE_060211.pdf" target="_blank" rel="noopener noreferrer">Sino-Forest Corporation (Strong Sell)</a>
+        <p class="entry-meta">Carson Block / Muddy Waters · 2011 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://hindenburgresearch.com/nikola/" target="_blank" rel="noopener noreferrer">Nikola: How to Parlay an Ocean of Lies</a>
+        <p class="entry-meta">Hindenburg Research · 2020 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://hindenburgresearch.com/adani/" target="_blank" rel="noopener noreferrer">Adani Group: How the World's 3rd Richest Man Is Pulling the Largest Con</a>
+        <p class="entry-meta">Hindenburg Research · 2023 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://citronresearch.com/wp-content/uploads/2015/10/Valeant-Philador-and-RandO-final-a.pdf" target="_blank" rel="noopener noreferrer">Valeant: The Pharmaceutical Enron?</a>
+        <p class="entry-meta">Andrew Left / Citron Research · 2015 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.bondcap.com/report/pdf/Internet_Trends_2019.pdf" target="_blank" rel="noopener noreferrer">Internet Trends Report</a>
+        <p class="entry-meta">Mary Meeker · 1995 · Deck · Sector Report</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.bondcap.com/report/pdf/Trends_Artificial_Intelligence.pdf" target="_blank" rel="noopener noreferrer">Trends – Artificial Intelligence</a>
+        <p class="entry-meta">Mary Meeker / BOND · 2025 · Deck · Sector Report</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.ben-evans.com/presentations" target="_blank" rel="noopener noreferrer">Mobile Is Eating the World</a>
+        <p class="entry-meta">Benedict Evans · 2014 · Deck · Sector Report</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.ark-invest.com/big-ideas-2024" target="_blank" rel="noopener noreferrer">Big Ideas</a>
+        <p class="entry-meta">ARK Invest (Cathie Wood) · 2017 · Report · Sector Report</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.slideshare.net/PitchDeckCoach/airbnb-first-pitch-deck-editable" target="_blank" rel="noopener noreferrer">Airbnb Series A Pitch Deck</a>
+        <p class="entry-meta">Airbnb (Brian Chesky et al.) · 2009 · Deck · Pitch Deck</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.slideshare.net/slideshow/uber-pitch-deck-49157401/49157401" target="_blank" rel="noopener noreferrer">UberCab Pitch Deck</a>
+        <p class="entry-meta">Uber (Garrett Camp / Travis Kalanick) · 2008 · Deck · Pitch Deck</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://sriramk.com/memos/roelof-youtube.pdf" target="_blank" rel="noopener noreferrer">YouTube Investment Memo</a>
+        <p class="entry-meta">Roelof Botha / Sequoia Capital · 2005 · Memo · Pitch Deck</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://en.wikipedia.org/wiki/The_Sovereign_Individual" target="_blank" rel="noopener noreferrer">The Sovereign Individual</a>
+        <p class="entry-meta">James Dale Davidson &amp; Lord William Rees-Mogg · 1997 · Book · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://a16z.com/the-techno-optimist-manifesto/" target="_blank" rel="noopener noreferrer">The Techno-Optimist Manifesto</a>
+        <p class="entry-meta">Marc Andreessen · 2023 · Manifesto · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.cold-takes.com/most-important-century/" target="_blank" rel="noopener noreferrer">The Most Important Century</a>
+        <p class="entry-meta">Holden Karnofsky · 2021 · Essay Series · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://slatestarcodex.com/2014/07/30/meditations-on-moloch/" target="_blank" rel="noopener noreferrer">Meditations on Moloch</a>
+        <p class="entry-meta">Scott Alexander · 2014 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://whatweowethefuture.com/" target="_blank" rel="noopener noreferrer">What We Owe the Future</a>
+        <p class="entry-meta">William MacAskill · 2022 · Book · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.lesswrong.com/posts/uMQ3cqWDPHhjtiesc/agi-ruin-a-list-of-lethalities" target="_blank" rel="noopener noreferrer">AGI Ruin: A List of Lethalities</a>
+        <p class="entry-meta">Eliezer Yudkowsky · 2022 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.theatlantic.com/science/archive/2019/07/we-need-new-science-progress/594946/" target="_blank" rel="noopener noreferrer">We Need a New Science of Progress</a>
+        <p class="entry-meta">Patrick Collison &amp; Tyler Cowen · 2019 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://gwern.net/scaling-hypothesis" target="_blank" rel="noopener noreferrer">The Scaling Hypothesis</a>
+        <p class="entry-meta">Gwern Branwen · 2020 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.usv.com/writing/2016/08/fat-protocols/" target="_blank" rel="noopener noreferrer">Fat Protocols</a>
+        <p class="entry-meta">Joel Monegro / USV · 2016 · Essay · Crypto</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://vijayboyapati.medium.com/the-bullish-case-for-bitcoin-6ecc8bdecc1" target="_blank" rel="noopener noreferrer">The Bullish Case for Bitcoin</a>
+        <p class="entry-meta">Vijay Boyapati · 2018 · Essay · Crypto</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.nbt.vc/blog/the-rise-of-the-solo-capitalists" target="_blank" rel="noopener noreferrer">The Rise of the Solo Capitalists</a>
+        <p class="entry-meta">Nikhil Basu Trivedi · 2020 · Essay · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.socialcapital.com/" target="_blank" rel="noopener noreferrer">IPO 2.0 / SPAC Investor Letters</a>
+        <p class="entry-meta">Chamath Palihapitiya · 2020 · Letter · Crypto</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://theleanstartup.com/" target="_blank" rel="noopener noreferrer">The Lean Startup / Minimum Viable Product</a>
+        <p class="entry-meta">Eric Ries · 2011 · Book · VC Doctrine</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.bridgewater.com/big-debt-crises" target="_blank" rel="noopener noreferrer">Principles for Navigating Big Debt Crises</a>
+        <p class="entry-meta">Ray Dalio · 2018 · Book · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.gmo.com/americas/research-library/reinvesting-when-terrified/" target="_blank" rel="noopener noreferrer">Reinvesting When Terrified</a>
+        <p class="entry-meta">Jeremy Grantham · 2009 · Memo · Macro Memo</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://aletteraday.substack.com/p/letter-42-david-einhorn-2002" target="_blank" rel="noopener noreferrer">Fooling Some of the People All of the Time (Allied Capital Short)</a>
+        <p class="entry-meta">David Einhorn / Greenlight · 2002 · Presentation · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://cdn.gmtresearch.com/public-ckfinder/Short-sellers/Unknown%20author/Luckin%20Coffee_Anonymous.pdf" target="_blank" rel="noopener noreferrer">Luckin Coffee (Anonymous Report Distributed by Muddy Waters)</a>
+        <p class="entry-meta">Muddy Waters / Carson Block · 2020 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.slideshare.net/slideshow/facebooks-original-pitch-deckpdf/259577117" target="_blank" rel="noopener noreferrer">Facebook (thefacebook) Media Kit / Early Pitch</a>
+        <p class="entry-meta">Facebook · 2004 · Deck · Pitch Deck</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.battery.com/powered/" target="_blank" rel="noopener noreferrer">OpenCloud Report</a>
+        <p class="entry-meta">Battery Ventures · 2012 · Report · Sector Report</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/1512.03385" target="_blank" rel="noopener noreferrer">Deep Residual Learning for Image Recognition (ResNet)</a>
+        <p class="entry-meta">He, Zhang, Ren, Sun (Microsoft) · 2015 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://arxiv.org/abs/1301.3781" target="_blank" rel="noopener noreferrer">Efficient Estimation of Word Representations (word2vec)</a>
+        <p class="entry-meta">Mikolov et al. (Google) · 2013 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://solana.com/solana-whitepaper.pdf" target="_blank" rel="noopener noreferrer">Solana: A New Architecture for a High Performance Blockchain</a>
+        <p class="entry-meta">Anatoly Yakovenko · 2017 · Whitepaper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://en.wikipedia.org/wiki/Superintelligence:_Paths,_Dangers,_Strategies" target="_blank" rel="noopener noreferrer">Superintelligence: Paths, Dangers, Strategies</a>
+        <p class="entry-meta">Nick Bostrom · 2014 · Book · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://sites.santafe.edu/~wbarthur/Papers/HBR.pdf" target="_blank" rel="noopener noreferrer">Increasing Returns and the New World of Business</a>
+        <p class="entry-meta">W. Brian Arthur · 1996 · Essay · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf" target="_blank" rel="noopener noreferrer">A Mathematical Theory of Communication</a>
+        <p class="entry-meta">Claude Shannon · 1948 · Paper · Technical Paper</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.sec.gov/news/studies/2009/oig-509/exhibit-0293.pdf" target="_blank" rel="noopener noreferrer">The World's Largest Hedge Fund Is a Fraud</a>
+        <p class="entry-meta">Harry Markopolos · 2005 · Report · Short / Activist</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://x.com/jack/status/2027129697092731343" target="_blank" rel="noopener noreferrer">Block Goes Intelligence-Native</a>
+        <p class="entry-meta">Jack Dorsey · 2026 · Letter · Worldview</p>
+      </li>
+      <li>
+        <a class="entry-link" href="http://archive.computerhistory.org/resources/access/text/2012/10/102746515-05-01-acc.pdf" target="_blank" rel="noopener noreferrer">Fairchild Semiconductor Founding</a>
+        <p class="entry-meta">Arthur Rock / Eugene Kleiner · 1957 · Letter · Pitch Deck</p>
+      </li>
+      <li>
+        <a class="entry-link" href="https://www.computerhistory.org/pdp-1/_media/pdf/DEC.pdp_1.1957.102664472.pdf" target="_blank" rel="noopener noreferrer">A Proposal to American Research and Development</a>
+        <p class="entry-meta">Ken Olsen / Harlan Anderson · 1957 · Memo · Pitch Deck</p>
+      </li>
+  </ol>
+
+  <footer>
+    Source directory: <a href="https://billiondollarpdf.com/" target="_blank" rel="noopener noreferrer">billiondollarpdf.com</a>
+  </footer>
+</main>
+</body>
+</html>
