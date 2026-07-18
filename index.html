@@ -453,6 +453,143 @@ mark {
   font-size: 0.86rem;
 }
 
+.module-explorer {
+  margin: 0 0 3.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.module-explorer-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+}
+
+.module-explorer-head h2 { margin: 0; }
+
+.module-explorer-head p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--sub);
+  font-size: 0.9rem;
+}
+
+.module-workspace {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 2fr);
+  border-top: 1px solid var(--line);
+}
+
+.module-list {
+  max-height: 38rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  padding: 0.55rem 0;
+}
+
+.module-choice {
+  width: 100%;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  padding: 0.72rem 1rem;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.module-choice:hover,
+.module-choice[aria-current="true"] {
+  border-left-color: var(--acc);
+  background: color-mix(in srgb, var(--acc) 7%, transparent);
+  color: var(--acc);
+}
+
+.module-choice span,
+.module-count {
+  display: block;
+  color: var(--sub);
+  font-size: 0.76rem;
+}
+
+.module-detail {
+  min-width: 0;
+  padding: 1.45rem clamp(1rem, 3vw, 2.2rem) 1.6rem;
+}
+
+.module-detail-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.module-detail h3 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.open-course {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--sub);
+  font-size: 0.8rem;
+  padding: 0.42rem 0.6rem;
+}
+
+.open-course:hover { border-color: var(--acc); }
+
+.module-items { list-style: none; margin: 0; padding: 0; }
+
+.module-item {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  gap: 0.75rem;
+  align-items: center;
+  border-top: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
+  padding: 0.82rem 0;
+}
+
+.module-item:first-child { border-top: 0; }
+
+.module-item a { min-width: 0; padding: 0; }
+
+.module-item-title { font-weight: 600; line-height: 1.35; }
+
+.module-kind {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--sub);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.67rem;
+  padding: 0.16rem 0.4rem;
+  white-space: nowrap;
+}
+
+.module-open {
+  color: var(--acc);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.module-subhead {
+  grid-column: 1 / -1;
+  color: var(--sub);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  padding-top: 0.42rem;
+  text-transform: uppercase;
+}
+
 .is-hidden {
   display: none !important;
 }
@@ -498,6 +635,17 @@ mark {
   .controls {
     grid-template-columns: 1fr;
   }
+
+  .module-explorer-head,
+  .module-detail-head {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .module-workspace { grid-template-columns: 1fr; }
+  .module-list { max-height: 15rem; border-right: 0; border-bottom: 1px solid var(--line); }
+  .module-item { grid-template-columns: max-content minmax(0, 1fr); }
+  .module-open { grid-column: 2; }
 
   .row {
     grid-template-columns: 1fr;
@@ -546,6 +694,7 @@ mark {
       </div>
     </section>
     <nav aria-label="Page links">
+      <a href="#modules">Modules</a>
       <a href="#schedule">Schedule</a>
       <a href="#finals">Finals</a>
       <a href="https://nikhi1g.github.io/seminal_papers/">Seminal Papers</a>
@@ -573,6 +722,20 @@ mark {
     </div>
   </section>
   <p id="result-note" class="result-note" aria-live="polite"></p>
+
+  <section id="modules" class="module-explorer" aria-labelledby="modules-title">
+    <div class="module-explorer-head">
+      <div>
+        <h2 id="modules-title" class="section-title">Course modules</h2>
+        <p>Select a module to see its saved child items. Protected content opens in Bruin Learn, where your course login controls access.</p>
+      </div>
+      <span id="module-total" class="module-count"></span>
+    </div>
+    <div class="module-workspace">
+      <div id="module-list" class="module-list" role="tablist" aria-label="Course modules"></div>
+      <section id="module-detail" class="module-detail" aria-live="polite"></section>
+    </div>
+  </section>
 
   <section id="schedule" aria-label="Schedule">
     <h2 class="section-title">Schedule</h2>
@@ -694,6 +857,104 @@ mark {
 </main>
 
 <script>
+const courseModulesUrl = 'https://bruinlearn.ucla.edu/courses/239671/modules';
+const itemUrl = (id) => id ? `https://bruinlearn.ucla.edu/courses/239671/modules/items/${id}` : courseModulesUrl;
+const entry = (title, type, id, indent = 0) => ({ title, type, url: itemUrl(id), indent });
+const heading = (title, indent = 0) => ({ title, type: 'SubHeader', indent });
+
+// Metadata only: resource files remain protected in Bruin Learn.
+const courseModules = [
+  { name: 'Pre-Course Resources and Assignments', items: [
+    heading('Course schedules'), entry('Summer Tu/Th schedule', 'File', 8161129, 1), entry('Summer Sunday schedule', 'File', 8161132, 1), entry('Complio Walkthrough', 'External link', 8160499), entry('EMT HIPAA Factsheet', 'File', 8160500), entry('HIPAA Quiz', 'Quiz', 8160501, 2), entry('EMT Clinical Education Resource', 'File', 8160502), entry('Clinical Education Quiz', 'Quiz', 8160503, 2), entry('EMT Course Policy Manual', 'File', 8160504), entry('Course Policy Manual Quiz', 'Quiz', 8160505, 2)
+  ] },
+  { name: 'EMS Operations', items: [entry('Week 1 Readings and Assignments', 'Page', 8160506), entry('Week 2 Readings and Assignments', 'Page', 8160507), entry('EMS Operations Module Exam Study Guide', 'Assignment', 8160508), entry('Workforce Safety and Wellness Study Grid', 'File', 8160509), entry('MCI Triage Worksheet', 'File'), entry('Medical Legal Grid', 'File')] },
+  { name: 'Airway and Respiratory', items: [entry('Week 3 Readings and Assignments', 'Page', 8160510), entry('Airway Module Exam Study Guide', 'Assignment', 8160511), entry('Respiratory Emergencies Study Grid', 'File', 8160512)] },
+  { name: 'Cardiovascular', items: [entry('Week 4 Readings and Assignments', 'Page', 8160513), entry('Cardiology Module Exam Study Guide', 'Assignment', 8160514), entry('Cardiovascular Emergencies Grid', 'File', 8160515), entry('Extra Skills Day Sign-up', 'Quiz'), entry('Cardiology Lecture 7/15 - Thomas', 'File'), entry('Cardiology & Cardiovascular Emergencies lecture slides', 'File')] },
+  { name: 'Traumatic Injuries', items: [entry('Student Copy of Session 9 Trauma and Shock Lecture Slides', 'File'), entry('Week 5 Readings and Assignments', 'Page', 8160516), entry('Week 6 Assignments and Readings', 'Page', 8160517), entry('Trauma Module Exam Study Guide', 'Assignment', 8160518), entry('Chest Injuries Study Grid', 'File', 8160519), entry('Environmental Emergencies Study Grid', 'File', 8160520), entry('Gastrointestinal and Genitourinary Study Grid', 'File', 8160521), entry('Shock Study Grid', 'File', 8160522)] },
+  { name: 'Medical Emergencies', items: [entry('Week 7 Assignments and Readings', 'Page', 8160523)] },
+  { name: 'Obstetrics, Pediatrics, and Geriatrics', items: [entry('Week 8 Assignments and Readings', 'Assignment', 8160524), entry('Week 9 Assignments and Readings', 'Page', 8160525)] },
+  { name: 'Testing Guidelines, Software, and Resources', items: [entry('Test Prep', 'External tool', 8160526), entry('ProctorU Set Up Guide', 'File', 8160527), entry('Remediation Assignment', 'Assignment'), heading('ProctorU sign-up links'), entry('ProctorU Operations Exam Sign Up', 'External link', 8160529), entry('RETAKE ProctorU Operations Exam Sign Up', 'External link', 8160530), entry('ProctorU Airway Exam Sign Up', 'External link', 8160531), entry('RETAKE ProctorU Airway Exam Sign Up', 'External link', 8160532), entry('ProctorU Cardiology Exam Sign Up', 'External link', 8160533), entry('RETAKE ProctorU Cardiology Exam Sign Up', 'External link', 8160534), entry('ProctorU Trauma Exam Sign Up', 'External link', 8160535), entry('RETAKE ProctorU Trauma Exam Sign Up', 'External link', 8160536), entry('ProctorU Medical Exam Sign Up', 'External link', 8160537), entry('RETAKE ProctorU Medical Exam Sign Up', 'External link', 8160538), entry('ProctorU Special Populations Exam Sign Up', 'External link', 8160539), entry('RETAKE ProctorU Special Populations Exam Sign Up', 'External link', 8160540)] },
+  { name: 'Post-Course Requirements', items: [entry('NREMT Exam Set Up', 'External link', 8160541), heading('Los Angeles County and State certification information'), entry('Website for Los Angeles County EMS Agency', 'External link', 8160543, 1), heading('Post-certification information', 1), entry('Virtual Job Board', 'External link', 8160545, 1)] },
+  { name: 'EMS Research 101 (Required Modules)', items: [] },
+  { name: 'Exam Study Guides', items: [entry('EMS Operations Module Exam Study Guide', 'Assignment', 8160546, 1), entry('Airway Module Exam Study Guide', 'Assignment', 8160547, 1), entry('Cardiology Module Exam Study Guide', 'Assignment', 8160548, 1), entry('Trauma Module Exam Study Guide', 'Assignment', 8160549, 1), entry('Medical Module Exam Study Guide', 'Assignment', 8160550, 1), entry('Special Populations Module Exam Study Guide', 'Assignment', 8160551, 1)] },
+  { name: 'Lecture Materials', items: [entry('Lecture Zoom Link', 'External link', 8160552), entry('Class Google Drive Folder', 'External link', 8160553), entry('Lecture Make Up Assignments', 'Assignment', 8160554), entry('Lecture 4 Activity', 'Assignment', 8160555), entry('Lecture 5 Activity', 'Assignment', 8160556), entry('Lecture 9 Activity', 'Assignment', 8160557), entry('Lecture 10 Activity', 'Assignment', 8160558), entry('Lecture 11 Activity', 'Assignment', 8160559), entry('Lecture 14 Activity', 'Assignment', 8160560), entry('Lecture 17 Study Guides', 'Assignment', 8160561), heading('Lecture recordings'), entry('Summer Lecture 1', 'Recording'), entry('Summer Lecture 2', 'Recording'), entry('Summer Lecture 3', 'Recording'), entry('Summer Lecture 5', 'Recording'), entry('Summer Lecture 6', 'Recording'), heading('Lecture slides (student version)'), entry('Lectures 1–7 student slides', 'Files')] },
+  { name: 'Prerequisite and Ride Along Information', items: [entry('Mask Fit Facial Hair Guidelines', 'File', 8160562), entry('Crisis Resources', 'File', 8160563), entry('Complio Setup Demonstration Video', 'External link', 8160564), entry('Completed Ride Along Information', 'Assignment', 8160565), entry('FEMA ICS Courses', 'External link', 8160566)] },
+  { name: 'Virtual Mentor Lecture Series Videos', items: ['Crew Resource Management: Concepts', 'Crew Resource Management: Elements', 'Crew Resource Management: Team Leader', 'Radio Communications', 'Crew Resource Management: Team Member', 'Allergic Reactions', 'Chest Trauma', 'Geriatrics: Introduction', 'Geriatrics: Injury and Illness', 'Geriatrics: Rights, Ethics, and Abuse', 'Skeleton Race Exercise', 'The Breathing Machine Exercise', 'Childbirth'].map((title) => entry(title, 'External tool')) },
+  { name: 'Virtual Ride-Along Videos', items: ['Allergic Reaction', 'Assault', 'Difficulty Breathing', 'Respiratory Distress', 'Fall in Apartment', 'Geriatric Altered Mental Status', 'Altered Mental Status', 'Motorcycle Crash', 'Mass-Casualty Incident Drill', 'Psychiatric Emergency', 'Pediatric Trauma', 'Weakness', 'Attempted Suicide'].map((title) => entry(title, 'External tool')) }
+];
+
+const moduleList = document.getElementById('module-list');
+const moduleDetail = document.getElementById('module-detail');
+const moduleTotal = document.getElementById('module-total');
+
+function renderModule(index) {
+  const module = courseModules[index];
+  moduleList.querySelectorAll('.module-choice').forEach((button, buttonIndex) => {
+    button.setAttribute('aria-current', String(buttonIndex === index));
+  });
+  moduleDetail.replaceChildren();
+  const detailHead = document.createElement('div');
+  detailHead.className = 'module-detail-head';
+  const title = document.createElement('h3');
+  title.textContent = module.name;
+  const courseLink = document.createElement('a');
+  courseLink.className = 'open-course';
+  courseLink.href = courseModulesUrl;
+  courseLink.target = '_blank';
+  courseLink.rel = 'noreferrer';
+  courseLink.textContent = 'Open course ↗';
+  detailHead.append(title, courseLink);
+  const count = document.createElement('p');
+  count.className = 'module-count';
+  count.textContent = module.items.length ? `${module.items.filter((item) => item.type !== 'SubHeader').length} saved items` : 'No child items were included in the saved Canvas module metadata.';
+  const list = document.createElement('ul');
+  list.className = 'module-items';
+  module.items.forEach((item) => {
+    const row = document.createElement('li');
+    row.className = item.type === 'SubHeader' ? 'module-subhead' : 'module-item';
+    if (item.type === 'SubHeader') {
+      row.textContent = item.title;
+    } else {
+      const kind = document.createElement('span');
+      kind.className = 'module-kind';
+      kind.textContent = item.type;
+      const link = document.createElement('a');
+      link.className = 'module-item-title';
+      link.href = item.url;
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      link.textContent = item.title;
+      link.style.marginLeft = `${item.indent * 0.7}rem`;
+      const open = document.createElement('a');
+      open.className = 'module-open';
+      open.href = item.url;
+      open.target = '_blank';
+      open.rel = 'noreferrer';
+      open.textContent = 'Open ↗';
+      row.append(kind, link, open);
+    }
+    list.append(row);
+  });
+  moduleDetail.append(detailHead, count, list);
+}
+
+courseModules.forEach((module, index) => {
+  const button = document.createElement('button');
+  button.className = 'module-choice';
+  button.type = 'button';
+  button.role = 'tab';
+  button.setAttribute('aria-current', 'false');
+  const name = document.createElement('strong');
+  name.textContent = module.name;
+  const count = document.createElement('span');
+  count.textContent = `${module.items.filter((item) => item.type !== 'SubHeader').length} items`;
+  button.append(name, count);
+  button.addEventListener('click', () => renderModule(index));
+  moduleList.append(button);
+});
+moduleTotal.textContent = `${courseModules.length} modules indexed`;
+renderModule(0);
+
 const toggle = document.getElementById('theme-toggle');
 const sun = toggle.querySelector('.sun');
 const moon = toggle.querySelector('.moon');
