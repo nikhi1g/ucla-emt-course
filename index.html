@@ -460,21 +460,10 @@ mark {
 }
 
 .module-explorer-head {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
   padding: 1.25rem 0;
 }
 
 .module-explorer-head h2 { margin: 0; }
-
-.module-explorer-head p {
-  max-width: 38rem;
-  margin: 0;
-  color: var(--sub);
-  font-size: 0.9rem;
-}
 
 .module-workspace {
   display: grid;
@@ -551,7 +540,7 @@ mark {
 
 .module-item {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  grid-template-columns: max-content max-content minmax(0, 1fr) max-content;
   gap: 0.75rem;
   align-items: center;
   border-top: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
@@ -580,6 +569,13 @@ mark {
   white-space: nowrap;
 }
 
+.module-check {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--acc);
+  cursor: pointer;
+}
+
 .module-subhead {
   grid-column: 1 / -1;
   color: var(--sub);
@@ -588,6 +584,15 @@ mark {
   letter-spacing: 0.06em;
   padding-top: 0.42rem;
   text-transform: uppercase;
+}
+
+#schedule,
+#empty,
+.controls,
+.result-note,
+.summary,
+.progress {
+  display: none;
 }
 
 .is-hidden {
@@ -636,7 +641,6 @@ mark {
     grid-template-columns: 1fr;
   }
 
-  .module-explorer-head,
   .module-detail-head {
     align-items: start;
     flex-direction: column;
@@ -644,8 +648,8 @@ mark {
 
   .module-workspace { grid-template-columns: 1fr; }
   .module-list { max-height: 15rem; border-right: 0; border-bottom: 1px solid var(--line); }
-  .module-item { grid-template-columns: max-content minmax(0, 1fr); }
-  .module-open { grid-column: 2; }
+  .module-item { grid-template-columns: max-content max-content minmax(0, 1fr); }
+  .module-open { grid-column: 3; }
 
   .row {
     grid-template-columns: 1fr;
@@ -695,8 +699,6 @@ mark {
     </section>
     <nav aria-label="Page links">
       <a href="#modules">Modules</a>
-      <a href="#schedule">Schedule</a>
-      <a href="#finals">Finals</a>
       <a href="https://nikhi1g.github.io/seminal_papers/">Seminal Papers</a>
     </nav>
   </header>
@@ -725,11 +727,7 @@ mark {
 
   <section id="modules" class="module-explorer" aria-labelledby="modules-title">
     <div class="module-explorer-head">
-      <div>
-        <h2 id="modules-title" class="section-title">Course modules</h2>
-        <p>Select a module to see its saved child items. Protected content opens in Bruin Learn, where your course login controls access.</p>
-      </div>
-      <span id="module-total" class="module-count"></span>
+      <h2 id="modules-title" class="section-title">Course modules</h2>
     </div>
     <div class="module-workspace">
       <div id="module-list" class="module-list" role="tablist" aria-label="Course modules"></div>
@@ -864,6 +862,25 @@ const heading = (title, indent = 0) => ({ title, type: 'SubHeader', indent });
 
 // Metadata only: resource files remain protected in Bruin Learn.
 const courseModules = [
+  { name: 'Course Schedule', items: [
+    entry('Before first day: course materials, Bruin Learn, and testing accounts', 'Setup'),
+    entry('Week 1: Human Body, Medical Terminology, Vital Signs, and Patient Assessment', 'Week'),
+    entry('Week 2: EMS Operations and EMS Operations Exam', 'Week'),
+    entry('Week 3: Airway and Respiratory and Airway Exam', 'Week'),
+    entry('Week 4: Cardiovascular and Cardiology Exam', 'Week'),
+    entry('Week 5: Shock and Trauma Overview', 'Week'),
+    entry('Week 6: Trauma content and Trauma Exam', 'Week'),
+    entry('Week 7: Medical Emergencies and Medical Exam', 'Week'),
+    entry('Week 8: Special Populations and Special Populations Exam', 'Week'),
+    entry('Week 9: Final Exam Review and final requirements', 'Week')
+  ] },
+  { name: 'Finals and Completion', items: [
+    entry('Finals testing: written final, assessments, and skills', 'Exam'),
+    entry('Platinum Skills Portfolio and instructor/peer evaluations', 'Requirement'),
+    entry('All six unit exams passed within two attempts', 'Requirement'),
+    entry('Ride-alongs: 24 hours and 10 patient contacts', 'Requirement'),
+    entry('Course completion deadline: September 30', 'Deadline')
+  ] },
   { name: 'Pre-Course Resources and Assignments', items: [
     heading('Course schedules'), entry('Summer Tu/Th schedule', 'File', 8161129, 1), entry('Summer Sunday schedule', 'File', 8161132, 1), entry('Complio Walkthrough', 'External link', 8160499), entry('EMT HIPAA Factsheet', 'File', 8160500), entry('HIPAA Quiz', 'Quiz', 8160501, 2), entry('EMT Clinical Education Resource', 'File', 8160502), entry('Clinical Education Quiz', 'Quiz', 8160503, 2), entry('EMT Course Policy Manual', 'File', 8160504), entry('Course Policy Manual Quiz', 'Quiz', 8160505, 2)
   ] },
@@ -885,7 +902,16 @@ const courseModules = [
 
 const moduleList = document.getElementById('module-list');
 const moduleDetail = document.getElementById('module-detail');
-const moduleTotal = document.getElementById('module-total');
+const moduleProgressKey = 'ucla-emt-module-progress-v1';
+const moduleProgress = new Set(JSON.parse(localStorage.getItem(moduleProgressKey) || '[]'));
+
+function moduleItemId(module, item, index) {
+  return `${module.name}::${index}::${item.title}`;
+}
+
+function saveModuleProgress() {
+  localStorage.setItem(moduleProgressKey, JSON.stringify([...moduleProgress]));
+}
 
 function renderModule(index) {
   const module = courseModules[index];
@@ -904,17 +930,25 @@ function renderModule(index) {
   courseLink.rel = 'noreferrer';
   courseLink.textContent = 'Open course ↗';
   detailHead.append(title, courseLink);
-  const count = document.createElement('p');
-  count.className = 'module-count';
-  count.textContent = module.items.length ? `${module.items.filter((item) => item.type !== 'SubHeader').length} saved items` : 'No child items were included in the saved Canvas module metadata.';
   const list = document.createElement('ul');
   list.className = 'module-items';
-  module.items.forEach((item) => {
+  module.items.forEach((item, itemIndex) => {
     const row = document.createElement('li');
     row.className = item.type === 'SubHeader' ? 'module-subhead' : 'module-item';
     if (item.type === 'SubHeader') {
       row.textContent = item.title;
     } else {
+      const check = document.createElement('input');
+      const progressId = moduleItemId(module, item, itemIndex);
+      check.className = 'module-check';
+      check.type = 'checkbox';
+      check.checked = moduleProgress.has(progressId);
+      check.setAttribute('aria-label', `Mark ${item.title} complete`);
+      check.addEventListener('change', () => {
+        if (check.checked) moduleProgress.add(progressId);
+        else moduleProgress.delete(progressId);
+        saveModuleProgress();
+      });
       const kind = document.createElement('span');
       kind.className = 'module-kind';
       kind.textContent = item.type;
@@ -931,11 +965,18 @@ function renderModule(index) {
       open.target = '_blank';
       open.rel = 'noreferrer';
       open.textContent = 'Open ↗';
-      row.append(kind, link, open);
+      row.append(check, kind, link, open);
     }
     list.append(row);
   });
-  moduleDetail.append(detailHead, count, list);
+  if (!module.items.length) {
+    const emptyState = document.createElement('p');
+    emptyState.className = 'module-count';
+    emptyState.textContent = 'No items available.';
+    moduleDetail.append(detailHead, emptyState);
+  } else {
+    moduleDetail.append(detailHead, list);
+  }
 }
 
 courseModules.forEach((module, index) => {
@@ -946,13 +987,10 @@ courseModules.forEach((module, index) => {
   button.setAttribute('aria-current', 'false');
   const name = document.createElement('strong');
   name.textContent = module.name;
-  const count = document.createElement('span');
-  count.textContent = `${module.items.filter((item) => item.type !== 'SubHeader').length} items`;
-  button.append(name, count);
+  button.append(name);
   button.addEventListener('click', () => renderModule(index));
   moduleList.append(button);
 });
-moduleTotal.textContent = `${courseModules.length} modules indexed`;
 renderModule(0);
 
 const toggle = document.getElementById('theme-toggle');
